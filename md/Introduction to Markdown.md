@@ -1,8 +1,8 @@
 # My Markdown Tutorial Reference
-> Last Modified: 3/30/2016
-> Author: Zuxing Gu
-> Editor: [Remarkable](https://remarkableapp.github.io/) 
-> Video: [Introduction video](https://www.youtube.com/watch?v=UpjAIcXti9s) 
+> Last Modified: 3/30/2016 
+> Author: Zuxing Gu 
+> Editor: [Remarkable](https://remarkableapp.github.io/)  
+> Video: [Introduction video](https://www.youtube.com/watch?v=UpjAIcXti9s)  
 > Prologue: This is  a reference for markdown. You can download the .md file to check how to write markdown. It also can be used as a quick check reference, for you can see the output quickly and focus on what you need.
 
 ### 1. Header(#)
