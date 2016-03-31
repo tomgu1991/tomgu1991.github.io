@@ -74,11 +74,11 @@ We can use double `=`  to highlight the key words.
 We can use double `~` to line the work.
 ~~hello~~
 
-#### check box
+#### 3.7 check box
 * [ ] Use `[ ]` for not done
 * [x] Use `[x]` for done 
 
-#### 3.7 Table
+#### 3.8 Table
 Using the following way to create a table
 ```
 one|two|three
@@ -89,3 +89,6 @@ one|two|three
 -|-|-
 1|2|3
 
+#### 3.9 Maths
+Using `$$` to insert maths. Refer [MathJax](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)  
+$$\sum_{i=1}^n a_i=0$$
