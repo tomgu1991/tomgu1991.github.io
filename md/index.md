@@ -7,7 +7,7 @@ Hi there, I'm Tom Gu. My Chinese name is Zuxing Gu. You can call me Tom for shor
 * [[2016-3-30] SImple Introdunction to Markdown](/blog/Technical/Simple introduction to Markdown.html) 
 
 ### Personal Life
-
+* [[2016-4-3] LIFE IN UIUC: 初来乍到](/blog/Life/UIUC_new_comer.html) 
 
 ### Thoughts
 
