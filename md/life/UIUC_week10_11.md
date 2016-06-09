@@ -27,7 +27,7 @@
 
    这是我度过的最棒的生日之一。
 
-   生日岛，顾名思义，过生日的人来玩会很爽，但最好带上玩伴，因为很多花钱的地方需要buy one get your birthday free。
+   生日岛，顾名思义，过生日的人来玩会很爽，但最好带上玩伴，因为很多花钱的地方需要buy one get your birthday free。住的地方会给你准备免费的香槟和巧克力。
 
    从LA的long beach出发，坐游轮一个小时就到。下船的瞬间就会被眼前的美景迷住，海水是蓝绿色的，海鸥、蓝天、白云。非常美丽。
 
@@ -35,5 +35,20 @@
 
    在玩Parasail的时候，竟然碰到MM和WW两队同性恋。他们也是无所避讳，申请接吻。这个国度思想很是开放。
 
+   很巧，我生日那天刚好是小岛的Annual Taste Around of Avalon。三刀买一张卡片，就可以以极低的价格试吃各个饭店的美食。而那一周，又刚好是annual avalon restaurant week。有各种好吃的，非常幸运。
+
 时间很快，玩的也很开心。回来后感觉，有钱在这里真好，能享受到国内更优质的生活。最后附上几张照片以作纪念。
 
+![Las Vegas](http://tomgu1991.github.io/images/LV.jpg)
+
+![LV2](http://tomgu1991.github.io/images/LA_magic.jpg)
+
+![champagne](http://tomgu1991.github.io/images/champagne.jpg)
+
+![chang](http://tomgu1991.github.io/images/chang.jpg)
+
+![same birthday](http://tomgu1991.github.io/images/same birthday.jpg)
+
+![island](http://tomgu1991.github.io/images/catalina island.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/snorkel.jpg)
