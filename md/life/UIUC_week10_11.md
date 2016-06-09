@@ -39,16 +39,28 @@
 
 时间很快，玩的也很开心。回来后感觉，有钱在这里真好，能享受到国内更优质的生活。最后附上几张照片以作纪念。
 
-![Las Vegas](http://tomgu1991.github.io/images/LV.jpg)
+![Las Vegas](http://tomgu1991.github.io/images/LA/LV.jpg)
 
-![LV2](http://tomgu1991.github.io/images/LA_magic.jpg)
+![LV2](http://tomgu1991.github.io/images/LA/LV_magic.jpg)
 
-![champagne](http://tomgu1991.github.io/images/champagne.jpg)
+![champagne](http://tomgu1991.github.io/images/LA/buffet.jpg)
 
-![chang](http://tomgu1991.github.io/images/chang.jpg)
+![chang](http://tomgu1991.github.io/images/LA/catalina island.jpg)
 
-![same birthday](http://tomgu1991.github.io/images/same birthday.jpg)
+![same birthday](http://tomgu1991.github.io/images/LA/same birthday.jpg)
 
-![island](http://tomgu1991.github.io/images/catalina island.jpg)
+![snorkel](http://tomgu1991.github.io/images/LA/snorkel.jpg)
 
-![snorkel](http://tomgu1991.github.io/images/snorkel.jpg)
+![golf cart](http://tomgu1991.github.io/images/LA/golf cart.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/LA/snorkel.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/LA/chang beach.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/LA/chang snorkel.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/LA/chang_back.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/LA/chang.jpg)
+
+![snorkel](http://tomgu1991.github.io/images/LA/double cart.jpg)
