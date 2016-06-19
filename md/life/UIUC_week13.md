@@ -1,7 +1,7 @@
 
 # Life in UIUC: Week 13
 
-One good news is that finally I start to  write my first academic paper. Smelling here!
+One good news is that finally I start to  write my first academic paper. Smiling here!
 
 记得刚入清华的时候，组内的一个客座教授说过：如果别人发了论文，你急不急，急。心急了，就乱了方寸，就更不可能做出成果。当时没有什么感受，现在，深有体会。想想二年级马上就过去了，加上做本科毕业设计，在清华已经两年半。至今，都没有一个工作可以形成一篇学术论文，说来也是尴尬。同样，对自己博士阶段的整个规划也不算清晰。
 
