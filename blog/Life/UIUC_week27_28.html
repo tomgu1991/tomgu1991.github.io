@@ -1,0 +1,509 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>UIUC_week27_28</title><style type='text/css'>html, body {overflow-x: initial !important;}html { font-size: 14px; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.42857143; color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); overflow-x: hidden; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { background-color: rgb(181, 214, 252); text-shadow: none; background-position: initial initial; background-repeat: initial initial; }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; padding-bottom: 70px; white-space: pre-wrap; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) { 
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+.typora-export #write { margin: 0px auto; }
+#write > p:first-child, #write > ul:first-child, #write > ol:first-child, #write > pre:first-child, #write > blockquote:first-child, #write > div:first-child, #write > table:first-child { margin-top: 30px; }
+img { max-width: 100%; }
+input, button, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+::before, ::after, * { box-sizing: border-box; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write div, #write pre { width: inherit; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6 { position: relative; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0rem; -webkit-margin-after: 0rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: bold; font-style: italic; }
+a { cursor: pointer; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; margin: 4px 0px 0px; }
+tr { page-break-inside: avoid; page-break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; page-break-inside: auto; text-align: left; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+pre { white-space: pre-wrap; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; page-break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+.md-fences .CodeMirror.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.show-fences-line-number .md-fences { padding-left: 0px; }
+.show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
+.footnotes { color: rgb(136, 136, 136); font-size: 0.9rem; padding-top: 1em; padding-bottom: 1em; }
+.footnotes + .footnotes { margin-top: -1em; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background-color: transparent; text-decoration: none; color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1rem; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: normal; text-align: left; box-sizing: content-box; direction: ltr; background-position: initial initial; background-repeat: initial initial; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li p, li .mathjax-block { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; }
+@media print { 
+  html, body { height: 100%; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  h1, h2, h3, h4, h5, h6 { page-break-after: avoid; orphans: 2; }
+  p { orphans: 4; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0mm; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 2.86rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; background-position: initial initial; background-repeat: initial initial; }
+p > .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+.mathjax-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: none; box-shadow: none; }
+.task-list { list-style-type: none; }
+.task-list-item { position: relative; padding-left: 1em; }
+.task-list-item input { position: absolute; top: 0px; left: 0px; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc::after, .md-toc-content::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: bold; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { color: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; text-decoration: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: '.'; }
+.md-tag { opacity: 0.5; }
+code { text-align: left; }
+h1 .md-tag, h2 .md-tag, h3 .md-tag, h4 .md-tag, h5 .md-tag, h6 .md-tag { font-weight: initial; opacity: 0.35; }
+a.md-header-anchor.md-print-anchor { border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: none !important; background-color: transparent !important; text-shadow: initial !important; background-position: initial initial !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.mathjax-block .MathJax_SVG_Display { text-align: center; margin: 1em 0em; position: relative; text-indent: 0px; max-width: none; max-height: none; min-width: 0px; min-height: 0px; width: 100%; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: normal; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { -webkit-transition: none; transition: none; }
+
+
+@include-when-export url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/**
+ * css forked from https://github.com/GitbookIO/gitbook 
+ * www.gitbook.com
+ * Apache License
+ * https://github.com/GitbookIO/gitbook/blob/master/LICENSE
+ **/
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'),url('file:///Users/guzuxing/Library/Application%20Support/abnerworks.Typora/themes/github/400.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'),url('file:///Users/guzuxing/Library/Application%20Support/abnerworks.Typora/themes/github/400i.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'),url('file:///Users/guzuxing/Library/Application%20Support/abnerworks.Typora/themes/github/700.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'),url('file:///Users/guzuxing/Library/Application%20Support/abnerworks.Typora/themes/github/700i.woff') format('woff')
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write{
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 20px 30px 40px 30px;
+	padding-top: 20px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+body > *:first-child {
+    margin-top: 0 !important;
+}
+body > *:last-child {
+    margin-bottom: 0 !important;
+}
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    /*background: url("file:///Users/guzuxing/Library/Application%20Support/images/modules/styleguide/para.png") no-repeat 10px center;*/
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 4px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+    border-bottom: 1px solid #ddd;
+}
+
+body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
+    margin-top: 0;
+    padding-top: 0;
+}
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dddddd;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+}
+table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 0.2em 1em;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+.task-list{
+	padding-left: 0;
+}
+
+.task-list-item {
+	padding-left:32px;
+}
+
+.task-list-item input {
+  top: 3px;
+  left: 8px;
+}
+
+@media screen and (min-width: 914px) {
+    /*body {
+        width: 854px;
+        margin: 0 auto;
+    }*/
+}
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag{
+	color: inherit;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+
+</style>
+</head>
+<body class='typora-export ' >
+<div  id='write'  class = 'is-mac'><h1><a name='header-c1' class='md-header-anchor '></a>Life in UIUC: Week 27&amp;28</h1><p>回来了，回到祖国的感觉很奇怪。有一些不舍得，有些说不出来的矛盾，心中的感觉真的是：抓紧做事情，早点毕业。或许这是崇洋媚外，但是，现在我真的觉得，美国好一些。和很多人说过这样的感受。有一位老师说的很诚恳，“你在美国，国家给你出钱生活，有没有工作压力。做的是自己喜欢做的事情，当然日子好过很多。如果你在这边也要面对生活的压力。或许就没有这么喜欢这里了。”我也不清楚是不是这个原因，只是感觉很有道理。</p><p>现在回想，在美国的半年收获很多。你的成长离不开帮助你的人。首先感谢广大群众，我的每一分钱都来自纳税人。是的，最底层的纳税人资助我这次访学。感谢清华大学和孙老师给这次机会，派我出来。当然，更要感谢J博士所做的一切。在美国的日子里，帮助我最多是H，我的室友。义务带我去各种地方，最感动，就是拉着我去芝加哥接女朋友。这样的好人真的不多！Andrew帮助我很多，特别是在美国的学习生活。作为美国博士，在和他的交流中，能体会到很多中美对博士生培养的不同。女神也是大大的赞，带我游玩洛杉矶。当时，坐在飞机上，最不舍得就是她。一个人生活在这里，每天上下班要5个小时，挣得工资不多。实在太辛苦。如果有一个女生在你一无所有的时候肯陪在你身边，那一定是真爱，一定要珍惜。对于父母，不能陪在他们身边，是不孝顺。每每想到这个，只能以“我发展好了，是他们最大的幸福”聊以自慰。</p><p>总结起来，美国好的地方真的很多，细节很多，能立即就想到的是：</p><ul><li>人民素质高。这种高是在骨子里的，是融于血脉。最简单的是，红绿灯、排队、微笑。</li><li>物质基础好。事实来讲，美国的物质和国内价格几乎一致。除了蔬菜，其他的价格差不多少。但是，人家挣得是美金。而且社会公共福利也好很多。至少很少有公园需要交钱。亲近大自然的机会随处可得。穿戴的产品更是折扣大，很多优质的产品在国内就买不到。看这些产品的便签，多半是Made in China。每到此时，心中也是不一样的滋味。住处，普通人都是住Apartment，也就是和我们普通的房子一样。但是，有一定收入的人，都是住House，就是我们的别墅。而房价相对于国内，也更合理一些。在这里，只要你有工作，你就可以过上小康的生活。</li><li>环境优美。当然，我去过的地方不多，即使在中国，我也只去过有限的几个城市。但是无疑，被人们称赞的大连，相对来说环境也要比美国差很多。在这里，蓝天白云随处可见、各种小动物、自然风景，美不胜收。在美国，每天，我最喜欢做的事情就是骑着自行车在大树下溜达。看到小松鼠，盯着看，很有趣。</li><li>教育先进。这种先进并不是一种崇洋媚外。虽然我没有亲生经历很多，但是还是能从一起访学的老师那里听到很多。是的，美国的幼儿园是自费的。可能，这也就是他们在教育孩子上仅有的几个花钱处之一。从小学到大学都是可以免费的。这种免费是真正的免费，不同于我们，还要参加各种各样的补习班。学生每天放学很早，课后可以参加各种各样的兴趣活动。当然，这个兴趣班可不是奥数、英文。大学里的教育与我们更是天壤之别。Tough，这是我能想到最直接的词汇。别的不说，上课的老师至少是领域专家。绝不会是，硬拉上来或者分配的课程。课程的内容、质量也要丰富很多。我没有完整的听过一门课，几堂课下来，你也会知道，只要你能完整的坚持一门课，那一定能够收获很多。</li><li>研究的圣地。作为一个博士生，我只在自己的组内做过“研究”，说出的话或者感受自然很片面。但是，我们的研究氛围却是不如这里。从老师的心思到学生的表现，各个方面都要逊色很多。有些方面，我们真的是业余。首先，看我们的导师在做什么？既然是做研究，有多少国内的导师是奋斗在科研一线？这里简单的就是：知道最近几年的论文情况、知道最近的发展行情、能够带领博士生讨论科研问题、能够带领博士生讨论论文。特别是带领博士生修改论文。再看学生，我们的讨论有多少？有效的学术讨论有多少？参与的科研活动、宴会有多少？扪心自问，真的不多。但是这些在这里，每天都会发生。自然，我所在的组有自己的问题。但是，相对于国内的组，这里更适合读博士，更适合做研究。</li></ul><p>当然，美国不好的地方也很多：</p><ul><li>不安全。我们缺少安全，身心都有。这里的枪击案很多，这里的抢劫很多。对于枪击，在我离开的前两周，在我回家的必经之路，一死六伤。而且，都是无辜的学生。我的室友H，在毫无征兆的情况下，被公司解雇。</li><li>人少。我有一次，做错了车，手机没电。在大街上很久没有遇到你个人，很慌，真的很慌。而且，地广人稀，很远才会遇到下一座房子。</li><li>种族差异。我们作为黄种人，很难融入当地的社会。很多场合，我发现，白人和白人、黑人和黑人、中国人和中国人，即使台湾人也是和台湾人在一起。我亲身经历过，去办理SSN，也就是社保号一样的东西，有了才可以工作。一个黑哥哥出了办公室就哭了，哭的那么真切、酸楚。询问过后，他的事情被耽搁了，他就要失去这次工作机会了。一切责任都是工作人员的错误，但是，这样的后果只能他自己承担。工作对于他，黑人，来说，十分苦难。而且办公室的工作人员，对待我们的差距也很不同。</li><li>资本主义。是的，这里是资本主义，金钱是一切的基础。我听很多当地人说过，只要你有工作，一切都好。</li></ul><p>说来，来美半年的体会也有很多，这里会参杂各种主观色彩。如果你不亲身经历，“please, do not judge. Just a joke.”</p><ul><li>能够帮助你的，只有你自己。是的，只有你自己。当然你爸妈，也会。很多事情，别人帮你，你应该感激；别人不帮你，这是正常状态。很多时候，很多事情，你自己不上，自己不冲上去，难道等别人给你好处吗？这件事情，我吃亏太多。比如说，我的文章写好了，我一直在等人帮助我改。在开会的时候也讨论过几次，但是都是夸夸其谈。但是这种状态，几乎就不会有人帮你。直到，我觉得不能再拖了。再比如说，我的研究方向。这个事情很难让别人帮助你。你需要的是自己阅读大量的资料，然后坚定的做下去。别人能够给予你的必经有限。</li><li>Do not judge。很有意思，我们很多时候喜欢评论，特别是和别人说自己的感受。但是，请不要轻易的评论别人或者给别人下定论。这是我很多缺点之一。在来美国之前，我自己有很多主观的评论，更喜欢于下结论。往往一点点的事情就下结论。但是，绝大部分情况下，如果你不是当事人。你很难有相同的感受。比如S的事情，这里，真心觉得之前的论断有失偏颇。最后，帮助我最多的之一就是他。说来也真是惭愧，自己对他的评论很武断。事情，要自己亲身经历再评论。最好的是，亲身经历也不要评论。必经，你不是我，我也不是你。</li><li>控制好自己的情绪。我是一个情绪化的人，内心的想法全部写在来上。或许这样觉得自己是性情中人，但，真的是幼稚。遇到事情，还是要尽量冷静。特别是说话做事，三思而后行。初到美国，自己的研究和导师想做的事情诸多不符合。当时第一感觉就是要怎么办，很暴躁。其实，现在想想，很多事情。第一时间控制住，不要过多的情绪话，事情往往都会顺利的发展下去。仔细的观察J，我觉得他最大的优点就是能够顺应别人，同时做好自己的事情。一大秘诀似乎就是，老师的过分要求下应下来，或许老师就忘记了。如果不能忘记，就用最小的代价完成。大部分的经历还是要做对自己有益的事情。或者这样不好，但是，这样才能最优化。</li></ul><p>这半年时间，错过了很多，时间利用的也不好。一直都是松松散散。特别是八月份开始，文章定型后就几乎在玩。这里当然很想做事情，碍于自己也不知道怎么开始。但是，任务放在那里，始终要解决。好在，自己见识的多一些，体会的多一些。</p><p>回国了，除了不舍，其他的也很难描述。希望大家一切进展顺利。</p></div>
+</body>
+</html>
