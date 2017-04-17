@@ -712,7 +712,33 @@ handleState(){
   标记CPA，通过location 来获得下一个要分析的点
   ```
 
+* CallStackCPA
 
+  ```
+  标记函数调用情况
+  1. domain - FlatLattice
+  2. Stop - sep
+  3. Merge - sep
+  4. factory - auto
+  5. PrecisionAd - static
+  6. Precision - single
+  7. state
+  (1) previous state
+  (2) current function name
+  (3) caller cfaNode (function entry node)
+  (4) depth
+  8. trans
+  这个只要处理两种
+  （1）如果是funCall边
+  		A. 正常创建新的state
+  		B. 如果是递归函数（之前的state里面出现过函数名），还要看是否超过配置的递归层数。如果超过了，那么就停止不进入函数，但是这个时候需要判断是否是有相应的summary边可以让你接着向后分析
+  （2）如果是call return边
+  		A. 现在所在的函数是否是当前状态的函数 -> 应该是
+  		B. 检查通配符wildcast也就是看这个是不是正常的funcCall 
+  			a. main - caller.fName = state.fName
+              b. other fun call - caller.succs.filter(fEntryNode).anyMactch(state.fName)
+  		B. 应为一个函数返回会有很多条边到不同的调用处，所以选择state中保存的callerNode对应的位置，返回上一个state
+  ```
 
 
 
@@ -740,7 +766,7 @@ CFA部分用于构造Control-Flow-Automata，这个是我们分析的基础。�
 
   所有的Summary Edge 用来记录摘要信息，可以加速分析过程
 
-  - FUNCTION_SUMMARY_EDGE 
+  - FUNCTION_SUMMARY_EDGE  // 这条边也用于函数调用中
   - LOOP_SUMMARY_EDGE 
 
 ##### 构造过程
