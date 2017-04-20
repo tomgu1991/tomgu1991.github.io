@@ -694,51 +694,106 @@ handleState(){
 
 ##### 必有CPA
 
-* ARGCPA
+###### ARGCPA
 
-  ```
-  这个是最外层的包装CPA，孩子是CompositeCPA。可以看作一个傀儡CPA，很多操作是在CompositeCPA做。主要对外
-  ```
+```
+这个是最外层的包装CPA，孩子是CompositeCPA。可以看作一个傀儡CPA，很多操作是在CompositeCPA做。主要对外
+```
+###### CompositeCPA
 
-* CompositeCPA
+```
+中层CPA，掌权者
+```
+###### LocationCPA
 
-  ```
-  中层CPA，掌权者
-  ```
+```
+标记CPA，通过location 来获得下一个要分析的点
+```
+###### CallStackCPA
 
-* LocationCPA
+```
+标记函数调用情况
+1. domain - FlatLattice
+2. Stop - sep
+3. Merge - sep
+4. factory - auto
+5. PrecisionAd - static
+6. Precision - single
+7. state
+(1) previous state
+(2) current function name
+(3) caller cfaNode (function entry node)
+(4) depth
+8. trans
+这个只要处理两种
+（1）如果是funCall边
+		A. 正常创建新的state
+		B. 如果是递归函数（之前的state里面出现过函数名），还要看是否超过配置的递归层数。如果超过了，那么就停止不进入函数，但是这个时候需要判断是否是有相应的summary边可以让你接着向后分析
+（2）如果是call return边
+		A. 现在所在的函数是否是当前状态的函数 -> 应该是
+		B. 检查通配符wildcast也就是看这个是不是正常的funcCall 
+			a. main - caller.fName = state.fName
+            b. other fun call - caller.succs.filter(fEntryNode).anyMactch(state.fName)
+		B. 应为一个函数返回会有很多条边到不同的调用处，所以选择state中保存的callerNode对应的位置，返回上一个state
+```
+##### 其他CPA
 
-  ```
-  标记CPA，通过location 来获得下一个要分析的点
-  ```
+###### UninitializedVariableCPA
 
-* CallStackCPA
+```java
+在这个CPA里面，我们的目的是找出那些使用了未初始化的变量，比如
+int a;
+int b = a; // error
 
-  ```
-  标记函数调用情况
-  1. domain - FlatLattice
-  2. Stop - sep
-  3. Merge - sep
-  4. factory - auto
-  5. PrecisionAd - static
-  6. Precision - single
-  7. state
-  (1) previous state
-  (2) current function name
-  (3) caller cfaNode (function entry node)
-  (4) depth
-  8. trans
-  这个只要处理两种
-  （1）如果是funCall边
-  		A. 正常创建新的state
-  		B. 如果是递归函数（之前的state里面出现过函数名），还要看是否超过配置的递归层数。如果超过了，那么就停止不进入函数，但是这个时候需要判断是否是有相应的summary边可以让你接着向后分析
-  （2）如果是call return边
-  		A. 现在所在的函数是否是当前状态的函数 -> 应该是
-  		B. 检查通配符wildcast也就是看这个是不是正常的funcCall 
-  			a. main - caller.fName = state.fName
-              b. other fun call - caller.succs.filter(fEntryNode).anyMactch(state.fName)
-  		B. 应为一个函数返回会有很多条边到不同的调用处，所以选择state中保存的callerNode对应的位置，返回上一个state
-  ```
+首先：我们这个CPA中存储的信息是所有声明了的变量，如果一个变量被定义，那么就移除。每次遇到一个变量被使用时，我们会去看是否在存储中，如果在，那也就是说还没有定义，那么就出错了。
+
+目前我们的版本是基于数据流，不考虑控制条件。
+
+发现：对于 FuncA -> FuncB -> FuncC
+(1) 我们要有一个Global 的数据结构给全局变量
+(2) fCall 我们要单独维持一个local Frame
+(3) 我们发现，由于callStack和location共同的作用，到达同一个点的两个执行路径，其callStack一定是相同的，因为getReached时候这两个是key
+
+1. domain
+	(1) join - 只要执行global和当前local就行。试想这个join是开了merge才会执行。那么FuncA->FuncB的时候，一定有某个点让这两条路径都到了这里。才会有后面的FuncB->FuncC，所以呢，前边的LocalFrame也都是合并过的。
+	(2) stop - 需要比较所有。试想既然到了这里，那么一定是前边没有stop，也就是说前边!(a isLessOrEqual b)，所以，到这里的时候要都判断。
+2. Stop - sep/join
+3. Merge - sep/join
+4. factory - auto
+5. PrecisionAd - static
+6. Precision - single
+7. state目前我们没有把出错信息放在这里
+(1) global varialbes names - Collection<String>
+(2) local variables names - Deque< Pair<String, Collection<String>> >
+  Pair[functionName::String : localVarNames::Collection<String>] -> 
+  Pair[functionName::String : localVarNames::Collection<String>] -> ...
+8. trans
+  我们先考虑在C里面的情况
+  (1) varialbe Declaration
+  	A. global?local?
+  	B. initializer?
+  	C. array? struct?
+  (2) FunctionCall
+  	A. parameters? -> new local frame
+  (3) FunctionReturn
+  	A. drop local frame -> return value
+  (4) statement
+  	A. functionCallSummary? check parameters
+  	B. assignment? a = b; check b and set a
+  	C. treat as expression
+  (5) assume
+  	A. treat as expression
+  
+      
+  For LLVM
+      alloca -> store -> load
+  (1) declaration
+      alloca -> add into local name|*
+      store -> remove from local 
+
+  
+```
+
 
 
 
