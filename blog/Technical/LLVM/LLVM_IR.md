@@ -492,6 +492,63 @@ Arguments
 
 
 
+###### Icmp
+
+Syntax
+
+```
+<result> = icmp <cond> <ty> <op1>, <op2>   ; yields i1 or <N x i1>:result
+```
+
+C
+
+```c
+if (global > 5)
+```
+
+llvm
+
+```
+%0 = load i32, i32* %global 
+%cmp = icmp sgt i32 %0, 5
+```
+
+Semantic
+
+```
+The ‘icmp‘ compares op1 and op2 according to the condition code given as cond. 
+
+If the operands are pointer typed, the pointer values are compared as if they were integers.
+
+If the operands are integer vectors, then they are compared element by element. The result is an i1 vector with the same number of elements as the values being compared. Otherwise, the result is an i1.
+```
+
+Overview
+
+```
+The ‘icmp‘ instruction returns a boolean value or a vector of boolean values based on comparison of its two integer, integer vector, pointer, or pointer vector operands.
+```
+
+Arguments
+
+```
+cond
+eq: equal
+ne: not equal
+ugt: unsigned greater than
+uge: unsigned greater or equal
+ult: unsigned less than
+ule: unsigned less or equal
+sgt: signed greater than
+sge: signed greater or equal
+slt: signed less than
+sle: signed less or equal
+```
+
+
+
+
+
 
 
 ###### Instruction-Name

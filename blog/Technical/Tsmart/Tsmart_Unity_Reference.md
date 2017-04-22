@@ -787,9 +787,14 @@ int b = a; // error
       
   For LLVM
       alloca -> store -> load
-  (1) declaration
-      alloca -> add into local name|*
-      store -> remove from local 
+	
+      alloca -> add into local <name|*>
+      store -> check first, if ok, remove second|*, else error add second
+      load -> check second, if ok, remove result, else error add result
+        
+  
+        
+  事实上：我们看def-use chain。遇到load的时候，看看load之前是否有一个store。只不过store中的内容也要看。
 
   
 ```
