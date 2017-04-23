@@ -698,16 +698,51 @@ handleState(){
 
 ```
 这个是最外层的包装CPA，孩子是CompositeCPA。可以看作一个傀儡CPA，很多操作是在CompositeCPA做。主要对外
+1. domain - FlatLattice
+2. stop - sep
+3. merge - 
+	if wrapped is sep, use sep 
+	else by configuration [hybrid|join] both use wrapped mergeOperator, default is join
+4. factory - auto
+5. P-Ad - static
+6. Precision - single
+7. state - 
+	children
+	parents
+	myCoveredBy
+	myCoveredByThis
+	mergeWith
+8. trans - use wrapped cpa
 ```
 ###### CompositeCPA
 
 ```
 中层CPA，掌权者
+1. domain - each child's domain
+2. stop - each child's stop
+3. merge - each child's merge 
+	if all wrapped is sep, use sep 
+	else by configuration [hybrid|agree|plain] , default is join hybrid
+4. factory - self defined
+5. P-Ad - static
+6. Precision - single
+7. state - 
+	children
+8. trans - each child's trans
+	// TODO it will so several tasks
 ```
 ###### LocationCPA
 
 ```
 标记CPA，通过location 来获得下一个要分析的点
+1. domain - FlatLattice
+2. stop - sep
+3. merge - sep
+5. P-Ad - static
+6. Precision - single
+7. state - 
+	Location which is CFANode
+8. trans - successor according to each edge
 ```
 ###### CallStackCPA
 
@@ -736,6 +771,44 @@ handleState(){
             b. other fun call - caller.succs.filter(fEntryNode).anyMactch(state.fName)
 		B. 应为一个函数返回会有很多条边到不同的调用处，所以选择state中保存的callerNode对应的位置，返回上一个state
 ```
+##### CPA Merge Stop 关系
+
+###### Merge
+
+```
+ARG:
+1. wrapped is sep, use sep
+2. by configuration
+	2.1 hybrid
+	2.2 join <default>
+		merge by wrapped cpa's merge operator
+		
+Composite
+1. all wrapped is sep, use sep
+2. by configuration
+	2.1 hybrid <default>
+	2.2 agree
+	2.3 plain
+		
+CallStack - sep
+Location - sep
+Uninitialized - sep/join
+
+```
+
+###### Stop
+
+```
+ARG - always sep stop, use wrapped stop operator
+
+Composite - self stop, use each child's stop operator
+
+CallStack - sep, stop by domain
+Location - sep, stop by domain
+Uninitialized - sep/join
+
+```
+
 ##### 其他CPA
 
 ###### UninitializedVariableCPA
