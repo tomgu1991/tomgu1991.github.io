@@ -610,6 +610,48 @@ ReachedSet模块是分析过程中的一个很重要的数据结构。存放了�
   根据不同的TraversalMethod，来创建不同的Waitlist
   ```
 
+* AbstractSortedWaitlist 
+
+  ```
+  default implementation of a sorted waitlist.
+  有时候，我们希望按照自己的方式来pop状态，就需要这个sorted waitlist
+  需要有一个key <K extends Comparable<K>>，用来决定如何pop
+  所以这个时候讲原先的单一waitlist拆分开，存成一个key-value的多个waitlist的集合
+  比如：NavigableMap<K, Waitlist> waitlistNavigableMap = new TreeMap<>();
+
+  但是每个Key对应的waitlist，就可以是普通的waitlist，用second来实现
+  private final WaitlistFactory wrappedWaitlistFacotry;
+
+  add - 加到对应的key的waitlist里面
+  pop - 总是返回最大Key的进行分析
+  其他雷同
+
+  比如说：我们将callstack和location作为Key，那么就可以做这样一件事：
+  if else 交汇的地方会一直卡在那里，直到两个分支的都到交汇处。此时向后分析就很合理
+  但是，simpleList目前是不会停在交汇处
+  ```
+
+* AbstractControlledWaitlist
+
+  ```
+  继承于sorted waitlist，区别是引入了maxSize
+
+  也就是说，我们在这里控制，每个key对应的waitlist最多允许有多少个状态，如果超过了，那么我们就可以选择部分来执行，这样就能够解决状态爆炸。
+  ```
+
+* DominationSortedWaitlist
+
+  ```
+  以location中CFANode domination和callstack的depth作为key的sorted、controlled的waitlist
+
+  domination是越靠近cfa后边越小。所以呢，如果两个分支都在走，用BFS。那么在交汇的地方，T分支100条语句，F就1条。
+  那么，交汇处的点的domination会比T和F的都小。
+  因为总是执行最大的key，
+  所以，F走完后，需要等T都完成才会继续进行交汇的点。
+
+  ```
+
+  ​
 
 
 #### Algorithm
