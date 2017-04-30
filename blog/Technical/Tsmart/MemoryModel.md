@@ -274,3 +274,67 @@ KnownSymbolicValue key [value=0 kind=BigInteger]
 KnownExplicitValue value [value=0 kind=Int]
 ```
 
+
+
+### LLVM IR 单文件单函数
+
+#### 有Memory
+
+实现alloca, load, store 不会改变指向信息
+
+getelementptr, 计算offset得到新指针
+
+```
+基地址 %ptr
+type
+offsets
+根据type offset移动
+<i32*5>* type
+offsets 0,1 相当于从零开始的下一个
+offsets 0，1，2 相当于[1][2]
+```
+
+bitcast，计算新指针
+
+```
+op,fromType, toType
+保证二进制不变，长度一致
+但是type的解引用的长度可能不同
+```
+
+MemVar
+
+- pointer : 指针
+  - memvar + offset
+  - type
+- basic data : int float
+- aggregate : array vector struct
+
+单文件单函数，只要如下两个链表，每个node是membar
+
+Global
+
+local
+
+#### 有Register
+
+这个是SSA，可以不用建模到内存里面
+
+register 也用Memvar表示
+
+
+
+TODO:
+
+1. register map?
+2. may: ptEdge, hvEdge?
+3. 不确定怎么处理
+
+
+
+![](MemoryModel.jpeg)
+
+
+
+![](MemoryModel1.jpeg)
+
