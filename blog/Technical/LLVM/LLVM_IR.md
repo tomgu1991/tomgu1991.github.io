@@ -976,12 +976,16 @@ llvm
 ```
 %retval = alloca i32, align 4
 store i32 0, i32* %retval, align 4
+
+%ptr = alloca i32, i32 4, align 1024
 ```
 
 Semantic
 
 ```
 Memory is allocated; a pointer is returned.
+
+ ‘alloca‘d memory is automatically released when the function returns. 
 ```
 
 Overview:
@@ -1102,7 +1106,7 @@ There are two arguments to the store instruction: a value to store and an addres
 Syntax
 
 ```
-
+fence [singlethread] <ordering>                   ; yields void
 ```
 
 C
@@ -1126,7 +1130,7 @@ Semantic
 Overview
 
 ```
-
+The ‘fence‘ instruction is used to introduce happens-before edges between operations.
 ```
 
 Arguments
@@ -1142,7 +1146,7 @@ Arguments
 Syntax
 
 ```
-
+cmpxchg [weak] [volatile] <ty>* <pointer>, <ty> <cmp>, <ty> <new> [singlethread] <success ordering> <failure ordering> ; yields  { ty, i1 }
 ```
 
 C
@@ -1154,19 +1158,35 @@ C
 llvm
 
 ```
+entry:
+  %orig = load atomic i32, i32* %ptr unordered, align 4                      ; yields i32
+  br label %loop
 
+loop:
+  %cmp = phi i32 [ %orig, %entry ], [%value_loaded, %loop]
+  %squared = mul i32 %cmp, %cmp
+  %val_success = cmpxchg i32* %ptr, i32 %cmp, i32 %squared acq_rel monotonic ; yields  { i32, i1 }
+  %value_loaded = extractvalue { i32, i1 } %val_success, 0
+  %success = extractvalue { i32, i1 } %val_success, 1
+  br i1 %success, label %done, label %loop
+
+done:
+  ...
 ```
 
 Semantic
 
 ```
-
+The contents of memory at the location specified by the ‘<pointer>‘ operand is read
+compared to ‘<cmp>‘
+if the read value is the equal, the ‘<new>‘ is written
+The original value at the location is returned, together with a flag indicating success (true) or failure (false).
 ```
 
 Overview
 
 ```
-
+The ‘cmpxchg‘ instruction is used to atomically modify memory. It loads a value in memory and compares it to a given value. If they are equal, it tries to store a new value into the memory.
 ```
 
 Arguments
@@ -1182,7 +1202,7 @@ Arguments
 Syntax
 
 ```
-
+atomicrmw [volatile] <operation> <ty>* <pointer>, <ty> <value> [singlethread] <ordering>          ; yields ty
 ```
 
 C
@@ -1194,25 +1214,36 @@ C
 llvm
 
 ```
-
+%old = atomicrmw add i32* %ptr, i32 1 acquire                        ; yields i32
 ```
 
 Semantic
 
 ```
-
+The contents of memory at the location specified by the ‘<pointer>‘ operand are atomically read, modified, and written back. The original value at the location is returned. The modification is specified by the operation argument:
+xchg: *ptr = val
+add: *ptr = *ptr + val
+sub: *ptr = *ptr - val
+and: *ptr = *ptr & val
+nand: *ptr = ~(*ptr & val)
+or: *ptr = *ptr | val
+xor: *ptr = *ptr ^ val
+max: *ptr = *ptr > val ? *ptr : val (using a signed comparison)
+min: *ptr = *ptr < val ? *ptr : val (using a signed comparison)
+umax: *ptr = *ptr > val ? *ptr : val (using an unsigned comparison)
+umin: *ptr = *ptr < val ? *ptr : val (using an unsigned comparison)
 ```
 
 Overview
 
 ```
-
+The ‘atomicrmw‘ instruction is used to atomically modify memory.
 ```
 
 Arguments
 
 ```
-
+The type of ‘<value>’ must be an integer type whose bit width is a power of two greater than or equal to eight and less than or equal to a target-specific size limit.
 ```
 
 
@@ -1222,19 +1253,50 @@ Arguments
 Syntax
 
 ```
-
+<result> = getelementptr <ty>, <ty>* <ptrval>{, <ty> <idx>}*
+<result> = getelementptr inbounds <ty>, <ty>* <ptrval>{, <ty> <idx>}*
+<result> = getelementptr <ty>, <ptr vector> <ptrval>, <vector index type> <idx>
 ```
 
 C
 
 ```c
+struct RT {
+  char A;
+  int B[10][20];
+  char C;
+};
+struct ST {
+  int X;
+  double Y;
+  struct RT Z;
+};
 
+int *foo(struct ST *s) {
+  return &s[1].Z.B[5][13];
+}
 ```
 
 llvm
 
 ```
+%struct.RT = type { i8, [10 x [20 x i32]], i8 }
+%struct.ST = type { i32, double, %struct.RT }
 
+define i32* @foo(%struct.ST* %s) nounwind uwtable readnone optsize ssp {
+entry:
+  %arrayidx = getelementptr inbounds %struct.ST, %struct.ST* %s, i64 1, i32 2, i32 1, i64 5, i64 13
+  ret i32* %arrayidx
+}
+
+define i32* @foo(%struct.ST* %s) {
+  %t1 = getelementptr %struct.ST, %struct.ST* %s, i32 1                        ; yields %struct.ST*:%t1
+  %t2 = getelementptr %struct.ST, %struct.ST* %t1, i32 0, i32 2                ; yields %struct.RT*:%t2
+  %t3 = getelementptr %struct.RT, %struct.RT* %t2, i32 0, i32 1                ; yields [10 x [20 x i32]]*:%t3
+  %t4 = getelementptr [10 x [20 x i32]], [10 x [20 x i32]]* %t3, i32 0, i32 5  ; yields [20 x i32]*:%t4
+  %t5 = getelementptr [20 x i32], [20 x i32]* %t4, i32 0, i32 13               ; yields i32*:%t5
+  ret i32* %t5
+}
 ```
 
 Semantic
@@ -1246,13 +1308,14 @@ Semantic
 Overview
 
 ```
-
+The ‘getelementptr‘ instruction is used to get the address of a subelement of an aggregate data structure. It performs address calculation only and does not access memory. The instruction can also be used to calculate a vector of such addresses.
 ```
 
 Arguments
 
 ```
-
+The first index always indexes the pointer value given as the first argument, the second index indexes a value of the type pointed to (not necessarily the value directly pointed to, since the first index can be non-zero), etc. 
+The first type indexed into must be a pointer value, subsequent types can be arrays, vectors, and structs. Note that subsequent types being indexed into can never be pointers, since that would require loading the pointer before continuing calculation.
 ```
 
 
@@ -1264,7 +1327,7 @@ Arguments
 Syntax
 
 ```
-
+<result> = trunc <ty> <value> to <ty2>             ; yields ty2
 ```
 
 C
@@ -1276,13 +1339,16 @@ C
 llvm
 
 ```
-
+%X = trunc i32 257 to i8                        ; yields i8:1
+%Y = trunc i32 123 to i1                        ; yields i1:true
+%Z = trunc i32 122 to i1                        ; yields i1:false
+%W = trunc <2 x i16> <i16 8, i16 7> to <2 x i8> ; yields <i8 8, i8 7>
 ```
 
 Semantic
 
 ```
-
+The ‘trunc‘ instruction truncates the high order bits in value and converts the remaining bits to ty2. Since the source size must be larger than the destination size, trunc cannot be a no-op cast. It will always truncate bits.
 ```
 
 Overview
@@ -1294,7 +1360,7 @@ Overview
 Arguments
 
 ```
-
+The ‘trunc‘ instruction takes a value to trunc, and a type to trunc it to. Both types must be of integer types, or vectors of the same number of integers. The bit size of the value must be larger than the bit size of the destination type, ty2. Equal sized types are not allowed
 ```
 
 
@@ -1304,7 +1370,7 @@ Arguments
 Syntax
 
 ```
-
+<result> = zext <ty> <value> to <ty2>             ; yields ty2
 ```
 
 C
@@ -1316,19 +1382,22 @@ C
 llvm
 
 ```
-
+%X = zext i32 257 to i64              ; yields i64:257
+%Y = zext i1 true to i32              ; yields i32:1
+%Z = zext <2 x i16> <i16 8, i16 7> to <2 x i32> ; yields <i32 8, i32 7>
 ```
 
 Semantic
 
 ```
-
+The zext fills the high order bits of the value with zero bits until it reaches the size of the destination type, ty2.
+When zero extending from i1, the result will always be either 0 or 1.
 ```
 
 Overview
 
 ```
-
+The ‘zext‘ instruction zero extends its operand to type ty2.
 ```
 
 Arguments
@@ -1344,7 +1413,7 @@ Arguments
 Syntax
 
 ```
-
+<result> = sext <ty> <value> to <ty2>             ; yields ty2
 ```
 
 C
@@ -1356,13 +1425,16 @@ C
 llvm
 
 ```
-
+%X = sext i8  -1 to i16              ; yields i16   :65535
+%Y = sext i1 true to i32             ; yields i32:-1
+%Z = sext <2 x i16> <i16 8, i16 7> to <2 x i32> ; yields <i32 8, i32 7>
 ```
 
 Semantic
 
 ```
-
+The ‘sext‘ instruction performs a sign extension by copying the sign bit (highest order bit) of the value until it reaches the bit size of the type ty2.
+When sign extending from i1, the extension always results in -1 or 0.
 ```
 
 Overview
@@ -1375,6 +1447,95 @@ Arguments
 
 ```
 
+```
+
+
+
+##### fptrunc
+
+```
+<result> = fptrunc <ty> <value> to <ty2>             ; yields ty2
+
+%X = fptrunc double 123.0 to float         ; yields float:123.0
+%Y = fptrunc double 1.0E+300 to float      ; yields undefined
+
+The ‘fptrunc‘ instruction casts a value from a larger floating point type to a smaller floating point type. If the value cannot fit (i.e. overflows) within the destination type, ty2, then the results are undefined. If the cast produces an inexact result, how rounding is performed (e.g. truncation, also known as round to zero) is undefined.
+```
+
+
+
+##### fpext
+
+```
+<result> = fpext <ty> <value> to <ty2>             ; yields ty2
+
+%X = fpext float 3.125 to double         ; yields double:3.125000e+00
+%Y = fpext double %X to fp128            ; yields fp128:0xL00000000000000004000900000000000
+
+The ‘fpext‘ instruction extends the value from a smaller floating point type to a larger floating point type. The fpext cannot be used to make a no-op cast because it always changes bits. Use bitcast to make a no-op cast for a floating point cast.
+```
+
+
+
+##### fptoui
+
+```
+<result> = fptoui <ty> <value> to <ty2>             ; yields ty2
+
+%X = fptoui double 123.0 to i32      ; yields i32:123
+%Y = fptoui float 1.0E+300 to i1     ; yields undefined:1
+%Z = fptoui float 1.04E+17 to i8     ; yields undefined:1
+
+The ‘fptoui‘ instruction converts its floating point operand into the nearest (rounding towards zero) unsigned integer value. If the value cannot fit in ty2, the results are undefined.
+```
+
+
+
+##### fptosi
+
+```
+<result> = fptosi <ty> <value> to <ty2>             ; yields ty2
+
+%X = fptosi double -123.0 to i32      ; yields i32:-123
+%Y = fptosi float 1.0E-247 to i1      ; yields undefined:1
+%Z = fptosi float 1.04E+17 to i8      ; yields undefined:1
+
+The ‘fptosi‘ instruction converts its floating point operand into the nearest (rounding towards zero) signed integer value. If the value cannot fit in ty2, the results are undefined.
+```
+
+
+
+##### uitofp/sitofp/ptrtoint/inttoptr
+
+```
+<result> = uitofp <ty> <value> to <ty2>             ; yields ty2
+%X = uitofp i32 257 to float         ; yields float:257.0
+%Y = uitofp i8 -1 to double          ; yields double:255.0
+
+The ‘uitofp‘ instruction interprets its operand as an unsigned integer quantity and converts it to the corresponding floating point value. If the value cannot fit in the floating point value, the results are undefined.
+
+
+<result> = sitofp <ty> <value> to <ty2>             ; yields ty2
+%X = sitofp i32 257 to float         ; yields float:257.0
+%Y = sitofp i8 -1 to double          ; yields double:-1.0
+
+The ‘sitofp‘ instruction interprets its operand as a signed integer quantity and converts it to the corresponding floating point value. If the value cannot fit in the floating point value, the results are undefined.
+
+
+<result> = ptrtoint <ty> <value> to <ty2>             ; yields ty2
+%X = ptrtoint i32* %P to i8                         ; yields truncation on 32-bit architecture
+%Y = ptrtoint i32* %P to i64                        ; yields zero extension on 32-bit architecture
+%Z = ptrtoint <4 x i32*> %P to <4 x i64>; yields vector zero extension for a vector of addresses on 32-bit architecture
+
+The ‘ptrtoint‘ instruction converts value to integer type ty2 by interpreting the pointer value as an integer and either truncating or zero extending that value to the size of the integer type. If value is smaller than ty2 then a zero extension is done. If value is larger than ty2 then a truncation is done. If they are the same size, then nothing is done (no-op cast) other than a type change.
+
+<result> = inttoptr <ty> <value> to <ty2>             ; yields ty2
+%X = inttoptr i32 255 to i32*          ; yields zero extension on 64-bit architecture
+%Y = inttoptr i32 255 to i32*          ; yields no-op on 32-bit architecture
+%Z = inttoptr i64 0 to i32*            ; yields truncation on 32-bit architecture
+%Z = inttoptr <4 x i32> %G to <4 x i8*>; yields truncation of vector G to four pointers
+
+The ‘inttoptr‘ instruction converts value to type ty2 by applying either a zero extension or a truncation depending on the size of the integer value. If value is larger than the size of a pointer then a truncation is done. If value is smaller than the size of a pointer then a zero extension is done. If they are the same size, nothing is done (no-op cast).
 ```
 
 
@@ -1384,7 +1545,7 @@ Arguments
 Syntax
 
 ```
-
+<result> = bitcast <ty> <value> to <ty2>             ; yields ty2
 ```
 
 C
@@ -1396,13 +1557,16 @@ C
 llvm
 
 ```
-
+%X = bitcast i8 255 to i8              ; yields i8 :-1
+%Y = bitcast i32* %x to sint*          ; yields sint*:%x
+%Z = bitcast <2 x int> %V to i64;        ; yields i64: %V
+%Z = bitcast <2 x i32*> %V to <2 x i64*> ; yields <2 x i64*>
 ```
 
 Semantic
 
 ```
-
+The ‘bitcast‘ instruction converts value to type ty2. It is always a no-op cast because no bits change with this conversion. The conversion is done as if the value had been stored to memory and read back as type ty2. Pointer (or vector of pointers) types may only be converted to other pointer (or vector of pointers) types with the same address space through this instruction. To convert pointers to other types, use the inttoptr or ptrtoint instructions first.
 ```
 
 Overview
@@ -1415,6 +1579,20 @@ Arguments
 
 ```
 
+```
+
+
+
+##### addrspacecast - TODO
+
+```
+<result> = addrspacecast <pty> <ptrval> to <pty2>       ; yields pty2
+
+%X = addrspacecast i32* %x to i32 addrspace(1)*    ; yields i32 addrspace(1)*:%x
+%Y = addrspacecast i32 addrspace(1)* %y to i64 addrspace(2)*    ; yields i64 addrspace(2)*:%y
+%Z = addrspacecast <4 x i32*> %z to <4 x float addrspace(3)*>   ; yields <4 x float addrspace(3)*>:%z
+
+The ‘addrspacecast‘ instruction converts the pointer value ptrval to type pty2. It can be a no-op cast or a complex value modification, depending on the target and the address space pair. Pointer conversions within the same address space must be performed with the bitcast instruction. Note that if the address space conversion is legal then both result and operand refer to the same memory location.
 ```
 
 
@@ -1483,7 +1661,7 @@ sle: signed less or equal
 Syntax
 
 ```
-
+<result> = fcmp [fast-math flags]* <cond> <ty> <op1>, <op2>     ; yields i1 or <N x i1>:result
 ```
 
 C
@@ -1495,7 +1673,10 @@ C
 llvm
 
 ```
-
+<result> = fcmp oeq float 4.0, 5.0    ; yields: result=false
+<result> = fcmp one float 4.0, 5.0    ; yields: result=true
+<result> = fcmp olt float 4.0, 5.0    ; yields: result=true
+<result> = fcmp ueq double 1.0, 2.0   ; yields: result=false
 ```
 
 Semantic
@@ -1523,7 +1704,7 @@ Arguments
 Syntax
 
 ```
-
+<result> = phi <ty> [ <val0>, <label0>], ...
 ```
 
 C
@@ -1535,19 +1716,22 @@ C
 llvm
 
 ```
-
+Loop:       ; Infinite loop that counts from 0 on up...
+  %indvar = phi i32 [ 0, %LoopHeader ], [ %nextindvar, %Loop ]
+  %nextindvar = add i32 %indvar, 1
+  br label %Loop
 ```
 
 Semantic
 
 ```
-
+At runtime, the ‘phi‘ instruction logically takes on the value specified by the pair corresponding to the predecessor basic block that executed just prior to the current block.
 ```
 
 Overview
 
 ```
-
+The ‘phi‘ instruction is used to implement the φ node in the SSA graph representing the function.
 ```
 
 Arguments
@@ -1563,7 +1747,8 @@ Arguments
 Syntax
 
 ```
-
+<result> = select selty <cond>, <ty> <val1>, <ty> <val2>             ; yields ty 
+selty is either i1 or {<N x i1>}
 ```
 
 C
@@ -1575,13 +1760,15 @@ C
 llvm
 
 ```
-
+%X = select i1 true, i8 17, i8 42          ; yields i8:17
 ```
 
 Semantic
 
 ```
-
+If the condition is an i1 and it evaluates to 1, the instruction returns the first value argument; otherwise, it returns the second value argument.
+If the condition is a vector of i1, then the value arguments must be vectors of the same size, and the selection is done element by element.
+If the condition is an i1 and the value arguments are vectors of the same size, then an entire vector is selected.
 ```
 
 Overview
@@ -1644,12 +1831,12 @@ Arguments
 
 
 
-##### va_arg
+##### va_arg - TODO
 
 Syntax
 
 ```
-
+<resultval> = va_arg <va_list*> <arglist>, <argty>
 ```
 
 C
@@ -1667,7 +1854,7 @@ llvm
 Semantic
 
 ```
-
+The ‘va_arg‘ instruction loads an argument of the specified type from the specified va_list and causes the va_list to point to the next argument. For more information, see the variable argument handling Intrinsic Functions.
 ```
 
 Overview
