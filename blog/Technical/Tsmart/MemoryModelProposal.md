@@ -31,6 +31,8 @@
 
 9. for return value? the same object or a copy?
 
+10. aggregate value
+
 ### Memory Graph Definition
 
 #### Function
@@ -52,7 +54,7 @@ TODO??
 
 
 
-#### Value
+#### Value - TOOD - aggregate value
 
 ```y
 
@@ -71,6 +73,8 @@ MemoryInterpretedValue ::= <type>, <value> [, other properties]
 	i32*, value, memoryObjectID
 	
 MemorySymbolicValue ::= <id>, Version(id), <label>
+
+
 	
 ```
 
