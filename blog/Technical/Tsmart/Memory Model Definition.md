@@ -286,7 +286,7 @@ $$
  
  e = FunctionCallEdge, \\
  
- inst = \text{%return = call type @f(ty1 arg1,...)}  \\
+ inst = \text{return = call type @f(ty1 arg1,...)}  \\
  
  frame = \mathsf{new}_{(s,h,r,g)} (StackFrame\{del \rightarrow f[Declaration]_{name}\}, objs \rightarrow NULL) \\
  
@@ -300,7 +300,7 @@ $$
  
  e = FunctionReturnEdge, \\
  
- inst = \text{%return = call type @f(ty1 arg1,...)}  \\
+ inst = \text{return = call type @f(ty1 arg1,...)}  \\
  
 \langle s', frame \rangle = \mathsf{pop}(s) \\
 
