@@ -1,16 +1,21 @@
+1. 用latex，加文字梳理，写成数学形式
+2. 先定义Memory Graph
+3. 类和value对应
+4. 实现细节可以先参考
+
 ### TODO
 
-1. Type -> use llvm type?   %struct.RT = type { i8, [10 x [20 x i32]], i8 }
+1. Type -> use llvm type?   %struct.RT = type { i8, [10 x [20 x i32]], i8 }  =》 用LLVM本身
 
-2. align
+2. align   =》 Graph的一个属性
 
-3. build-in functions? intrinsic 
+3. build-in functions? intrinsic  =》 当作一个函数
 
-4. struct ? use object or value?
+4. struct ? use object or value?  => 在object拆开
 
-5. MemoryRegisterObject: register size and point-to size?
+5. MemoryRegisterObject: register size and point-to size? =》 register size
 
-6. write i64 to i32, from left to right? right to left?
+6. write i64 to i32, from left to right? right to left? =》 Model
 
 7. need type to position
 
@@ -27,11 +32,11 @@
    we store as bits, so we need to know, i32 2 is the third element, i32 1 is the seconde
    ```
 
-8. float/double bit-version?
+8. float/double bit-version? =》 Chen guang
 
-9. for return value? the same object or a copy?
+9. for return value? the same object or a copy?  =? TODO
 
-10. aggregate value
+10. aggregate value => 是放在object叉开  还是  value上
 
 ### Memory Graph Definition
 
@@ -71,15 +76,16 @@ MemoryInterpretedValue ::= <type>, <value> [, other properties]
 	long, value
 	double, value
 	i32*, value, memoryObjectID
+	aggregate value
 	
-MemorySymbolicValue ::= <id>, Version(id), <label>
+MemorySymbolicValue ::= <type>, <id>, Version(id), <label>
 
 
 	
 ```
 
 
-#### Object
+#### Object 特殊的value
 
 ```
 MemoryObject ::= <MemoryRegisterObject>|<MemoryRegionObject>
@@ -187,6 +193,8 @@ do nothing
 
 ```
 <result> = add <ty> <op1>, <op2>          ; yields ty:result
+
+// register如何处理，写成推导
 
 1. at MemoryStackFrame_N
 	create MemoryGraphValue
