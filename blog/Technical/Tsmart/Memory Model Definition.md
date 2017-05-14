@@ -162,7 +162,7 @@ type FloatValue (MemoryInterpretedValue) = <
 	value : float
 	>
 type PointerValue (MemoryInterpretedValue) = <
-	value : ??? -- should be point-to address
+	value : ??? -- should be point-to address (base address, offset, deref_type)
 	>
 type AggregateValue (MemoryInterpretedValue)  			-- abstract super class of aggregate values
 type ArrayValue (AggregateValue) = <
@@ -172,7 +172,7 @@ type StructureValue (AggregateValue) = <
 	value : ???
 	>
 
-type MemorySymbolicValue = <
+type MemorySymbolicValue = <  -- may require type and size
 	name : String
 	version : int
 	>
@@ -482,12 +482,23 @@ $$
 ### TODO
 
 1. how to describe bit-version of float/double?
+
 2. for return value, the reference or a copy?
+
+   A: always consider as copy (return value can be constant/register)
+
 3. Merge and Stop operator?
+
 4. the value of PointerValue and all AggregateValue needs discussion
+
 5. whether we need Opaque structure
+
 6. BigDecimal or long for IntegerValue
+
 7. global is stored continually? 
+
 8. more examples
+
 9. global/heap/stackFrame also need key->value???
+
 10. where to store the result of `getelementptr`
