@@ -10,6 +10,8 @@
 >
 > [Video](https://www.youtube.com/watch?v=2lfpMIl98Fw)
 
+[TOC]
+
 ### What is a pass?
 
 The LLVM Pass Framework is an important part of the LLVM system, because LLVM passes are where most of the interesting parts of the compiler exist. Passes perform the transformations and optimizations that make up the compiler, they build the analysis results that are used by these transformations, and they are, above all, a structuring technique for compiler code.

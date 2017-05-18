@@ -1,5 +1,8 @@
 # Memory Graph Proposal
 
+[TOC]
+
+
 Memory Graph (MG) models the state of memory and registers, it is the core CPA of analysis.
 
 ### Memory Graph Definition
@@ -10,7 +13,7 @@ $$
 \begin{align}
 	& \text{tuple}
 	&& \langle ~~ \rangle \\
-	& \text{set of instance of object}
+	& \text{list of instance objects}
 	&& [ ~~ ]^+ \\
 	& \text{an instance of } type \text{ named as } name
 	&& name:type \\
@@ -33,7 +36,7 @@ $$
 
 	MemoryGraphState & ::=  \langle{MemoryGraph, MemoryLayout}\rangle \\
 	MemoryGraph & ::=  \langle{StackMemory, GlobalMemory, HeapMemory, RegisterMemory}\rangle \\
-	StackMemory & ::=   [stackFrame]^+ \\
+	StackMemory & ::=   [StackFrame]^+ \\
 	StackFrame & ::= \langle{function, [MemoryRegion]^+}\rangle\\
 	GlobalMemory & ::=  [MemoryRegion]^+\\
 	HeapMemory & ::=  [MemoryRegion]^+\\
@@ -175,6 +178,8 @@ type StructureValue (AggregateValue) = <
 type MemorySymbolicValue = <  -- may require type and size
 	name : String
 	version : int
+	type : Type
+	size : int
 	>
 ```
 
@@ -198,7 +203,7 @@ Interpreted / uninterpreted memory content can convert from each other with the 
 
 *Why there are both interpreted / uninterpreted memory contents?* The reason is that they are both used in programming. For instance, we may store the value of `x` by `x = 5` and use its value via `(x & 1) == 0`. The format of writing and reading may not be always consistent. To avoid frequent conversion between the two forms, we store the value of certain memory region by the format in which it is defined, and perform the conversion on demand.
 
-#### **Example**
+#### Example
 
 Assume `int` is 32-bit and `float` is 64-bit. A memory region may store content of the following:
 
@@ -269,11 +274,11 @@ $$
 
 #### `SwitchEdge`- TODO
 
-#### `BlankEdge`- TODO
+#### `BlankEdge`
 
 
 
-#### `FunctionCall` edge
+#### `FunctionCallEdge`
 
 ```
 <result> = [tail | musttail | notail ] call [fast-math flags] [cconv] [ret attrs] <ty>|<fnty> <fnptrval>(<function args>) [fn attrs]
@@ -293,7 +298,7 @@ $$
 s' = \mathsf{push}(s, frame:StackFrame)
 $$
 
-#### `FunctionReturn` edge
+#### `FunctionReturnEdge`
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -309,7 +314,7 @@ $$
 
 
 
-#### `Assume` edge
+#### `AssumeEdge` 
 
 It will change memory model. Only extract memory models to do comparison.
 
@@ -317,7 +322,7 @@ It will change memory model. Only extract memory models to do comparison.
 
 
 
-#### `Instrunction`edge
+#### `InstrutionEdge` 
 
 #####  `ret`
 
@@ -337,11 +342,10 @@ frame'' = \mathsf{update}(frame, f.ret, region) \\
 s' = \mathsf{push} (s'', frame'')
 $$
 
-#### 
 
 Binary Operations  / Conversion Operations
 
-##### `add`
+##### `add` 
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -363,7 +367,7 @@ $$
 
 Aggregate Operations
 
-##### `extractvalue`
+##### `extractvalue` 
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -383,7 +387,7 @@ $$
 
 Memory Operations
 
-##### `alloca`
+##### `alloca` 
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -407,7 +411,7 @@ $$
 
 
 
-##### `load`
+##### `load` 
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -423,7 +427,7 @@ region = \mathsf{new}_{(s,h,r,g)} (MemoryRegion \{  label \rightarrow \text{resu
 r' = \mathsf{update} (r, r[\text{result}]_{name}, region)
 $$
 
-##### `store`
+##### `store` 
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -441,7 +445,7 @@ ptRegion' = \mathsf{update}(ptRegion, ptRegion[content]_{name}, \Delta_{content}
 r' = \mathsf{update} (r, r[\text{pointer}]_{name}, ptRegion')
 $$
 
-##### `getelementptr` TODO
+##### `getelementptr` TODO 
 
 $$
 (s, h, r, g) \overset{e, inst}{\mapsto} (s', h', r', g') , \text{where}\\
@@ -465,7 +469,7 @@ $$
 
 
 
-#### Implementation:
+#### Implementation: 
 
 1. For $size$, we treat  as bit-length.
 2. All $id$ s are auto-generated.
@@ -479,9 +483,11 @@ $$
 
 
 
-### TODO
+### TODO 
 
 1. how to describe bit-version of float/double?
+
+   A: need
 
 2. for return value, the reference or a copy?
 
@@ -489,16 +495,63 @@ $$
 
 3. Merge and Stop operator?
 
+   ​
+
 4. the value of PointerValue and all AggregateValue needs discussion
+
+
+   see above
 
 5. whether we need Opaque structure
 
 6. BigDecimal or long for IntegerValue
 
+   APInt
+
 7. global is stored continually? 
+
+   list
 
 8. more examples
 
 9. global/heap/stackFrame also need key->value???
 
-10. where to store the result of `getelementptr`
+   global is constant -> implementation
+
+10. where to store the result of `getelementptr
+
+   register
+
+
+
+函数写在后面
+declaration
+CPA就是存状态
+Definition 写类型
+id 是实现细节
+register shi map
+写成java
+psi 是 state
+sizeof : T -> int
+
+
+new 分开写：value 和 region
+要有更新函数
+做一个确定性的小事情
+
+peek 返回一个
+
+phiEdge switchEdge是有变化的 ，fuzhi
+
+inst 放边上
+
+assumeEdge 不满足返回bottom
+
+region 地址， frame 也有地址， 其实是看偏移
+global也是，有一个初始位置
+
+有一些内容没有具体值，是符号如何处理
+
+
+
+1. symbolic value -> see JavaSMT in CPAChecker

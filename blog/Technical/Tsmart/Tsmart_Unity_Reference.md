@@ -4,6 +4,10 @@
 >
 > 这将是一份旷日持久的文档。。。
 
+[TOC]
+
+
+
 ### 前期准备
 
 1. 配置环境：Ubuntu 16.04，llvm 3.9.0([源代码编译llvm](http://tomgu1991.github.io/blog/Technical/LLVM/LLVM_Introduction.html))，Gitlab添加权限、下载项目源[代码](http://sts.thss.tsinghua.edu.cn:5080/)

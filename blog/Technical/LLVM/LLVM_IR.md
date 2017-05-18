@@ -2,6 +2,10 @@
 
 >clang: 3.9.0
 
+[TOC]
+
+
+
 ### What is LLVM IR
 
 LLVM IR is  short for LLVM intermediate representation. LLVM is a **Static Single Assignment (SSA)** based representation that provides type safety, low-level operations, flexibility, and the capability of representing ‘all’ high-level languages cleanly. It is the common code representation used throughout all phases of the LLVM compilation strategy.
