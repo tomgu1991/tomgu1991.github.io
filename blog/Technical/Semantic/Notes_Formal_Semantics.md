@@ -25,9 +25,11 @@ Three strands of semantics of programming languages:
 
 A clear operational semantics is very helpful in implementation. Axiomatic semantics for special kinds of languages can give strikingly elegant proof sys- tems, useful in developing as well as verifying programs. Denotational semantics provides the deepest and most widely applicable techniques, underpinned by a rich mathematical theory. Indeed, the different styles of semantics are highly dependent on each other.
 
+
+
 ## Convention
 
-#### For logical 
+### For logical 
 
 $\&$ conjunction
 
@@ -47,7 +49,9 @@ $\forall$ for all
 
 $\exists!$ unique object
 
-#### For Set
+
+
+### For Set
 
 $\emptyset$ empty set
 
@@ -79,7 +83,9 @@ $ R^+ = \bigcup_{n \in \omega} R^{n+1}$ is transitive closure,
 
 $R^\ast = \bigcup_{n \in \omega} R^{n+1}$ is reflexive closure.
 
-#### Operational Semantics
+
+
+### Operational Semantics
 
 n range over numbers N, n is called ***metavariable*** , can be primed n' or subscripted $n_0$ 
 
@@ -103,6 +109,65 @@ $\langle X := 5, \sigma \rangle \rightarrow \sigma[5/X]$ means the state obtaine
 
 $\langle a, \sigma \rangle \rightarrow_{1} \langle a', \sigma' \rangle$  to mean one step in the evaluation of a in state $\sigma$ yields a' and $\sigma'$ 
 
+
+
+### Induction
+
+* $(~P(0) ~~\&~~ (\forall m \in \omega. P(m) \Rightarrow P(m+1))~) \Rightarrow \forall n \in \omega. P(n)$ *basis* , *induction step* , P(m) assertion called *induction hypothesis* 
+
+* $\langle a, \sigma \rangle \rightarrow m \& \langle a, \sigma \rangle \rightarrow m' \Rightarrow  m = m'$  says the evaluation of arithmetic expression in IMP is deterministic.
+
+* When $a \prec b$ we say a is predecessor of b.
+
+* $d \Vdash_R y$ to mean d is an R-derivation of y, where R is a set of rule instances, instance written as (X/y) where X is a finite set called premises and y is an element called conclusion
+  $$
+  \begin{cases}
+  (\emptyset/y) \Vdash_R y,& \text{if } (\emptyset/y) \in R \\
+  (\{ d_1, \dots, d_n \}/y) \Vdash_R y,& \text{if } (\{ x_1, \dots, x_n \}/y) \in R ~\&~ d_1 \Vdash_R x_1 \& \dots \& d_n \Vdash_R x_n
+  \end{cases}
+  $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Denotational Semantics
+
+The command c is said to denote $\mathcal{C} [[c]] $ and  $\mathcal{C} [[c]] $  is said to be a denotation of c.
+
+ We shall use the brackets [[]] round an argument of a semantic function to show that the argument is a piece of syntax. That is c is a piece of syntax.
+
+We can see, for operational semantics, it is based on syntax and defined by rules. For denotational semantics, it is based on high level abstraction. Write as functions.
+
+$ \hat{R}(B) = \{ y \mid \exists (X/y) \in R. X \subseteq B \}$ , R is a set of rule instance (X/y), $\hat{R}$ is an operator on sets, B is a set, $\hat{R}(B)$ results in a set. $\hat{R}$ has a least fixed point 
+$$
+fix(\hat{R}) =_{def} \bigcup_{n \in \omega} \hat{R}^n(\emptyset)
+$$
+
+$(P, \sqsubseteq)$ , partial order
+
+$\bigsqcup X$ , subset X of a partial order has a least upper bound
+
+\bigsqcap $\sqcap$, has a greatest lower bound
+
+$(D, \sqsubseteq_D)$ , complete partial order, if it has least upper bound for all $\omega$-chains , $\sqsubseteq$ called ordering, $\bot$ is bottom
+
+$ fix(f) = \bigsqcup_{n \in \omega} f^n(\bot)$ , is a fixed point of $f: D \rightarrow D$ , which is a continuous function on D, which is a cpo with bottom 
+
+
+
+
+
+
 ## Set Theory
 
 ### Logical Notation
@@ -120,6 +185,7 @@ For statements or assertions $A, B$
 * $\forall x.P(x)$ , for all x P(x)
 * $\forall x \in X. P(x)$ , quantifier $\forall $ ranges over a set X, $\forall x. x \in X \Rightarrow P(x)$
 * $\exists!x. P(x)$ , *unique* object satisfying $P(x)$ 
+* ​
 
 ### Sets
 
@@ -161,6 +227,8 @@ Intuitively, a set is an (unordered) collection of objects, called its *elements
 
 * $ X \setminus Y = \{ x \mid x \in X ~\&~ x \notin Y \} $ , set difference
 
+
+
 ### Relations and Functions
 
 **A binary relation** between X and Y is an element of Pow(X x Y), and so a subset of pairs in the relation. When R is a relation R X x Y we shall often write xRy for (x,y) in R.
@@ -191,6 +259,8 @@ A function $f : X \rightarrow Y$ has an inverse $g : Y \rightarrow X$ iff g(f(x)
 
 Let R be a relation on a set X. Define $R^{0} = Id_X$ , the identity relation on the set X, $R^1 = R$ and assuming $R^n$ is defined, $R^{n+1} = R \circ R^n$ . $ R^+ = \bigcup_{n \in \omega} R^{n+1}$ is transitive closure, $R^\ast = \bigcup_{n \in \omega} R^{n+1}$ is reflexive closure.
 
+
+
 ## Operational Semantics
 
 ### IMP a simple imperative language
@@ -208,6 +278,8 @@ Formally, IMP's behaviour is described by rules which specify how its expression
 * n, X, a, b, c is called *metavariable* , range over the syntactic categories can be primed or subscripted like X'
 
 
+
+
 ### Arithmetic Expression
 
 Underlying most models is an idea of state determined by what contents are in the locations. With respect to a state, an arithmetic expression evaluates to an integer and a boolean expression evaluates to a truth value. The resulting values can influence the execution of commands which will lead to changes in state.
@@ -221,10 +293,12 @@ Underlying most models is an idea of state determined by what contents are in th
 ​		
 All three relations are examples of the general notion of transition relations, or transition systems, in which the configurations are thought of as some kind of state and the relations as expressing possible transitions, or changes, between states.
 
-### Rules
+
+
+#### Rules
 
 $\langle n, \sigma \rangle \rightarrow n$ 
-$\langle X, \sigma \rangle \rightarrow \sigma(n)$ 
+$\langle X, \sigma \rangle \rightarrow \sigma(X)$
 $$ \frac{\langle a_0, \sigma \rightarrow n_0 \rangle~~\langle a_1, \sigma \rightarrow n_1 \rangle }{\langle a_0+a_1, \sigma \rightarrow n \rangle} $$ , where n is the sum of $n_0$ and $n_1$ . The rule has a premise and a conclusion.
 $\frac{}{\langle n, \sigma \rangle \rightarrow n}$  , rule with empty premises are called axioms.
 
@@ -236,15 +310,19 @@ We call such a structure a derivation tree or simple a derivation.
 
 In general, we write $\langle a, \sigma \rangle \rightarrow n$, and say a in $\sigma$ evaluates to n, iff it can be derived from the rules for the evaluation of arithmetic expressions.
 
-In this way the rules provide an algorithm for the evaluation of arithmetic expressions based on the search for a derivation tree. Because it can be implemented fairly directly the rules specify the meaning, or semantics, of arithmetic expressions in an operational way, and the rules are said to give an operational semantics of such expressions. 
+In this way the rules provide an algorithm for the evaluation of arithmetic expressions based on the search for a derivation tree. Because it can be implemented fairly directly the rules specify the meaning, or semantics, of arithmetic expressions in an operational way, and **the rules are said to give an operational semantics of such expressions.** 
 
 The style of semantics we have chosen is one which is becoming prevalent however. It is one which is often called structural operational semantics because of the syntax-directed way in which the rules are presented. It is also called natural semantics because of the way derivations resemble proofs in natural deduction-a method of constructing formal proofs.
+
+
 
 ### Boolean expression
 
 #### Rules
 
 ![](2.png)
+
+
 
 ### Commands
 
@@ -269,3 +347,189 @@ $\langle a, \sigma \rangle \rightarrow_{1} \langle a', \sigma' \rangle$  to mean
 For example:
 
 $\langle X := 5; Y:=1, \sigma \rangle \rightarrow_1 \langle Y:=1, \sigma[5/X] \rangle \rightarrow_1 \sigma[5/X][1/Y] $. 
+
+
+
+## Induction
+
+### Mathematical induction
+
+$(~P(0) ~~\&~~ (\forall m \in \omega. P(m) \Rightarrow P(m+1))~) \Rightarrow \forall n \in \omega. P(n)$
+
+*basis* , *induction step* , P(m) assertion called *induction hypothesis* 
+
+
+
+In showing a property Q(m) holds inductively of all numbers m, it might be that the property's truth at m + 1 depends not just on its truth at the predecessor m but on its truth at other numbers preceding m as well.
+
+Use *course-of-values induction* , to help out (**the past course of truths all the way back to ** $n_0$ and not just the immediately previous step , That is, we show truth flows from an historical trend
+
+For example, Every integer n greater than 1 has a factorization into primes.
+
+$(~\forall m \in \omega. ~(\forall k < m. Q(k)) \Rightarrow Q(m)~) \Rightarrow \forall n \in \omega. Q(n)$			
+
+
+
+### Structural induction
+
+$\langle a, \sigma \rangle \rightarrow m \& \langle a, \sigma \rangle \rightarrow m' \Rightarrow  m = m'$  says the evaluation of arithmetic expression in IMP is deterministic.
+
+
+
+Let $P(a)$ be a property of arithmetic expressions a. To show P(a) holds for all arithmetic expressions a it is sufficient to show:
+
+![](4.png)
+
+
+The P(a) is *induction hypothesis* , The principle says that in order toshow the induction hypothesis is true of all arithmetic expressions it suffices to show thatit is true of atomic expressions and is preserved by all the methods of forming arithmeticexpressions.
+
+​		
+
+### Well-founded induction
+
+Mathematical and structural induction are special cases of a general and powerful proof principle called well-founded induction.
+If a property fails to hold of any expression then it must fail on some minimal expression which when it is broken down yields subexpressions, all of which satisfy the property. 
+This is the feature required of a relation if it is to support well-founded induction.
+
+#### Definition:
+
+A well-founded relation is a binary relation $\prec$ on a set A such that there are no infinite desending chains $\dots \prec a_i \prec \dots \prec a_1 \prec a_0$. When $a \prec b$ we say a is predecessor of b.
+
+```
+That is ensure there is not a chain which is infinite desending. Basically, elements may be on different chains. Like this:
+*   *   *
+ \ / \ /
+  *   *
+See proposition
+```
+
+#### Proposition
+
+So, Let $\prec$  be a binary relation on a set A. The relation $\prec$ is well-founded iff any nonempty subset Q of A has a minimal element, an element m such that
+$$
+m \in Q ~\&~ \forall b \prec m.~b \notin Q.
+$$
+#### The principle of well-founded induction
+
+ Let $\prec$  be a well founded relation on a set A. Let P be a property. Then $\forall a \in A. P(a)$
+
+iff 
+$$
+\forall a \in A. ( [\forall b \prec a. P(b)] \Rightarrow P(a))
+$$
+The principle says that to prove a property holds of all elements of a well-founded set it suffices to show that if the property holds of all predecessors of an arbitrary element a then the property holds of a.
+
+Proposition  provides an alternative to proofs by well-founded induction. Suppose A is a well-founded set. Instead of using well-founded induction to show every element of A satisfies a property P, we can consider the subset of A which the property P fails, i.e. the subset F of counterexamples. By Proposition 3.7, to show F is $\emptyset$ it is sufficient to show that F cannot have a minimal element.
+
+Well-founded induction is the most important principle in proving the termination of programs. Uncertainties about termination arise because of loops or recursions in a program. If it can be shown that execution of a loop or recursion in a program decreases the value in a well-founded set then it must eventually terminate.
+
+
+
+### Induction on derivations
+
+Structural induction alone is often inadequate to prove properties of operational seman- tics. Often it is useful to do induction on the structure of derivations.
+
+A derivation of an element x takes the form of a tree which is either an instance of an axiom or of the formwhich includes derivations of xI, ... ,Xn , the premises of a rule instance with conclusion X. 
+
+![](5.png)
+
+Let d, d' be derivations. 
+Say d' is an immediate subderivation of d, written d' $\prec_1$ d, iff d has the form (D/y) with d' in D. 
+Write $\prec$ for the transitive closure of $\prec_1$ , $\prec = \prec^+$ . We say d' is a subderivation of d iff d' $\prec$ d.
+
+
+
+## Denotational Semantics
+
+The transitions built out of the syntax makes it hard to compare two programs written in different programming language. Therefore, we need denotational semantics.
+
+For example, $c_0 \sim c_1 \text{iff} (\forall \sigma, \sigma'. \langle c_0, \sigma \rangle \rightarrow \sigma' \iff \langle c_1, \sigma \rangle \rightarrow \sigma') $ . In other words, c0 ~ c1 iff  Co and Cl determine the same partial function on states. This suggests we should define the meaning, or semantics, of IMP at a more abstract level in which we take the denotation of a command to be a partial function on states.
+
+The brackets [[ ]] (\llbracket) are traditional in denotational semantics. The square brackets [[a]] put the arithmetic expression a in quotes so we don't evaluate a. We could have written e.g. A( "3 + 5")$\sigma$ = 8 instead of A[[3 + 5]]$\sigma$ = 8. 		
+So the brackets [[ ]] do not represent true and complete quotation. We shall use the brackets [[]] round an argument of a semantic function to show that the argument is a piece of syntax.
+
+We define the semantic functions by structural induction.
+$$
+\mathcal{A} : \mathbf{Aexp} \rightarrow (\Sigma \rightarrow \mathbf{N}) \\
+\mathcal{B} : \mathbf{Bexp} \rightarrow (\Sigma \rightarrow \mathbf{T}) \\
+\mathcal{C} : \mathbf{Com} \rightarrow (\Sigma \rightarrow \Sigma) \\
+$$
+So, $\mathcal{A}$ is a function from arithmetic expressions to $\Sigma \rightarrow \mathbf{N}$	. 
+
+Also, $a \in \mathcal{A}, \mathcal{A}[[a]] : \Sigma \rightarrow \mathbf{N}$ is a function.
+
+The command c is said to denote $\mathcal{C} [[c]] $ and  $\mathcal{C} [[c]] $  is said to be a denotation of c.
+
+### Denotations of Aexp
+
+![](6.png)
+
+### Denotations of Bexp
+
+![](7.png)
+
+### Denotations of Com
+
+![](8.png)
+
+Here is a problem.
+
+![](9.png)
+
+This involves $\varphi$ on both sides of the equation. Then we can regard $\Gamma$ , where
+
+![](10.png)
+
+
+
+### Partial Order
+
+![](11.png)
+
+
+
+#### Partial order
+
+![](12.png)
+
+
+
+#### Least upper bound (lub)
+
+![](13.png)
+
+
+
+#### Complete partial order (cpo)
+
+![](14.png)
+
+
+
+#### Monotonic
+
+![](15.png)
+
+
+
+#### Fixed point
+
+![](16.png)
+
+
+
+#### Greatest lower bound (glb)
+
+![](17.png)
+
+
+
+#### Complete Lattice
+
+#### Knaster-Tarski Theorem
+
+
+![](18.png)
+
+
+![](19.png)
