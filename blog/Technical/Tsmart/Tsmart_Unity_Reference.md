@@ -829,11 +829,18 @@ MemoryFrame 代表stack的一层
 	对于这样一整块的内存，我们将内容存在region里面，function用来表示函数的类型，layout则用于将变量名对应到偏移
 	
 MemoryRegion 代表一块实际的内存区域
-	::= id, size, start:MemoryLocation, content:MemoryRange->MgValue
+	::= id, size:MemoryRegionSize, start:MemoryLocation, content:MemoryRange->MgValue
 	一块内存，start确定这块内存的位置（global或者是stack或者是heap），content里面就是存的真是的值
 	存的值中，有可能一个range对应多个value	
+	
+MemoryRegionSize
+	ExplicitRegionSize: long, for global
+	SymbolicExpresionRegionSize: symbolicExpression
+	VariableRegionSize： 长度可变 for local frame
+	
 FrameLayout
-	::= variables:str->MemoryRange
+	::= variables:str->MemoryRange, byteSize: long 
+	byteSize 是整数，遇到一个加一个
 	
 MemoryLocation 是内存地址
 	::= base:BaseAddress, offset
@@ -882,7 +889,6 @@ MgAbstractMgValue(type, size)
 	只能通过偏移关系，从region#content中获取
 	
 	
-
 
 
 
