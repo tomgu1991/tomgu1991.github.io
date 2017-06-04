@@ -822,34 +822,6 @@ handleState(){
 ```
 MemoryGraphCPA是整个分析中的核心CPA，用来描述内存中的情况。
 
-MemoryGraph 代表整个内存的情况，是Immutable 
-	::= stack:MemoryFrame+, global:MemoryFrame, heap:MemoryRegion+, register:str->MemoryContent
-MemoryFrame 代表stack的一层
-	::= region:MemoryRegion, function:Type, layout:FrameLayout
-	对于这样一整块的内存，我们将内容存在region里面，function用来表示函数的类型，layout则用于将变量名对应到偏移
-	
-MemoryRegion 代表一块实际的内存区域
-	::= id, size:MemoryRegionSize, start:MemoryLocation, content:MemoryRange->MgValue
-	一块内存，start确定这块内存的位置（global或者是stack或者是heap），content里面就是存的真是的值
-	存的值中，有可能一个range对应多个value	
-	
-MemoryRegionSize
-	ExplicitRegionSize: long, for global
-	SymbolicExpresionRegionSize: symbolicExpression
-	VariableRegionSize： 长度可变 for local frame
-	
-FrameLayout
-	::= variables:str->MemoryRange, byteSize: long 
-	byteSize 是整数，遇到一个加一个
-	
-MemoryLocation 是内存地址
-	::= base:BaseAddress, offset
-	由两部分组成，一个base基地址，另一个是offset偏移
-BaseAddress 基地址用来区别Global，Stack，Heap
-	KnownBaseAddress 是已知基地址，包括
-		StackBaseAddress 初始时是零，后面遇到函数调用，是在现有地址之上进行偏移
-		GlobalAddress 只有一份，确定
-		
 对于MgValue，我们主要是参考LLVM_TYPE
 Interface:
 MgValue
@@ -877,24 +849,47 @@ MgAbstractMgValue(type, size)
 				MgInstructionExpression(instrunction, operands) -> treat as a AST tree
 				MgUnarySymbolicExpression(operand:MgValue)
 				MyBinarySymbolicExpression(operand1, operand2)
-			
 
+
+MemoryAddress 是物理内存地址
+	::= base:BaseAddress, offset
+	由两部分组成，一个base基地址，另一个是offset偏移
+BaseAddress 基地址用来区别Global，Stack，Heap
+	KnownBaseAddress 是已知基地址，包括
+		StackBaseAddress 初始时是零，后面遇到函数调用，是在现有地址之上进行偏移
+		GlobalAddress 只有一份，确定
+		
+MemoryInternalRange
+	start - end 用于graph内部，表示一个value的位置
 	
-所以：从内存中取值的情况
-（1）如果知道名字
-	layout：str->MemoryRange, region#content:MemoryRange->MgValue
-（2）在Register里面用label
-	register:str->MemoryContent, range由register的type确定，value同理
-（3）不知道名字
-	只能通过偏移关系，从region#content中获取
+MemoryRegionSize
+	ExplicitRegionSize: long, for global
+	SymbolicExpresionRegionSize: symbolicExpression
+	VariableRegionSize： 长度可变 for local frame
+
+FrameLayout
+	::= variables:str->MemoryInternalRange, byteSize: long 
+	byteSize 是整数，遇到一个加一个
 	
+MemoryRegion 代表一块实际的内存区域
+	::= id, size:MemoryRegionSize, start:MemoryAddress, content:MemoryInternalRange->MgValue
+	一块内存，start确定这块内存的位置（global或者是stack或者是heap），
+	content里面就是存的真是的值存的值中，有可能一个range对应多个value
+
+MemoryFrame 代表stack的一层
+	::= region:MemoryRegion, function:Type, layout:FrameLayout, , register:str->MemoryRange
+	对于这样一整块的内存，我们将内容存在region里面，function用来表示函数的类型，layout则用于将变量名对应到偏移
+
+MemoryGraph 代表整个内存的情况，是Immutable 
+	::= stack:MemoryFrame+, global:MemoryFrame, heap:MemoryRegion+
+
+
+====================================
+MemoryLocation 用于Pointer中的地址
+	region，offset -> 可以确定的指向内存的一个位置
 	
-
-
-
-
-
-
+MemoryRange 用于register中
+	MemoryLocation， size -> 可以确定获得register中label对应于哪一个位置
 
 
 ```
