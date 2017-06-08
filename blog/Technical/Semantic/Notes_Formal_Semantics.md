@@ -135,11 +135,6 @@ $\langle a, \sigma \rangle \rightarrow_{1} \langle a', \sigma' \rangle$  to mean
 
 
 
-
-
-
-
-
 ### Denotational Semantics
 
 The command c is said to denote $\mathcal{C} [[c]] $ and  $\mathcal{C} [[c]] $  is said to be a denotation of c.
@@ -165,8 +160,34 @@ $ fix(f) = \bigsqcup_{n \in \omega} f^n(\bot)$ , is a fixed point of $f: D \righ
 
 
 
+### Axiomatic Semantics
 
+*invariant* , assertion I, that remains true under each step
 
+$\{ A \}c\{B\}$ , *partial correctness assertions* , because they say nothing about the command c if it fails to terminate. where A and B are assertions and c is a command, for all states which satisfy A if the execution c from state terminates in a', the a' satisfies B.
+
+$[A]c[B]$ states will terminate
+
+$\sigma \models A $ , the state satisfies assertion A
+
+*bound and free variables* , We sayan occurrence of an integer variable i in an assertion is bound if it occurs in the scope of an enclosing quantifier $\exists i $  or $\forall i$ If it is not bound we say it is free.
+
+***interpretation*** is a function which assigns an integer to each integer variable 
+$I : \mathbf{Intvar} \rightarrow \mathbf{N}$ 
+
+$\mathcal{Av} [[a]]I\sigma$ , a ***semantic function*** Av which gives the value associated with an arithmetic expression with integer variables in a particular state in a particular interpretation
+
+$I[n/i]$ to mean the interpretation got from interpretation I by changing  the value for integer-variable i to n, 
+$$
+I[n/i](j) = 
+\begin{cases}
+
+	n & \text{if} j \equiv i , \\
+	I(j) & \text{otherwise}.
+\end{cases}
+$$
+
+*validity* , $\models \{ A\}c\{B\}$ mean for all interpretations I and all states are true.
 
 ## Set Theory
 
@@ -533,3 +554,50 @@ This involves $\varphi$ on both sides of the equation. Then we can regard $\Gamm
 
 
 ![](19.png)
+
+
+
+## Axiomatic Semantics
+
+We turn to consider the problem of how to prove that a program we have written in IMP does what we require of it.
+
+We need to be a little more clever, and abstract, and use some logic to reason about the program.
+
+Historically R.W.Floyd invented rules for reasoning about flow charts, and later C.A.R.Hoare modified and extended these to give a treatment of a language like IMP but with procedures. Originally their approach was advocated not just for proving properties of programs but also as giving a method for explaining the meaning of program constructs; the meaning of a construct was specified in terms of "axioms" (more accurately rules) saying how to prove properties of it. For this reason, the approach is traditionally called axiomatic semantics.
+
+The assertion I is called an invariant of the while-loop because it remains true under each iteration of the loop. So finally when the loop terminates I will hold at the end.
+
+$\{ A \}c\{B\}$ , partial correctness assertions , where A and B are assertions and c is a command, for all states which satisfy A if the execution c from state terminates in a', the a' satisfies B.
+$ \forall \sigma. ( \sigma \models A ~\&~ \mathcal{C} [[c]] \sigma \text{ is defined}) \Rightarrow \mathcal{C}[[c]]\sigma ~ \models ~ B $
+
+
+
+### Assn the aseertion language
+
+![](20.png)
+
+​		
+We sayan occurrence of an integer variable i in an assertion is bound if it occurs in the scope of an enclosing quantifier $\exists i $  or $\forall i$ If it is not bound we say it is free.
+
+
+
+### Semantics of assertions
+
+interpretation is a function which assigns an integer to each integer variable 
+$I : \mathbf{Intvar} \rightarrow \mathbf{N}$ 
+
+![](21.png)
+
+
+
+### Proof rules for partial correctness
+
+The proof rules are syntax-directed; the rules reduce proving a partial correctness assertion of a compound command to proving partial correctness assertions of its immediate subcom- mands. The proof rules are often called Hoare rules and the proof system, consisting of the collection of rules, Hoare logic.
+
+In this context the Hoare rules are thought of as a proof system, derivations are called proofs and any conclusion of a derivation a theorem. We shall write |- {A}c{B} when {A}c{B} is a theorem.
+
+### Soundness
+
+Soundness: Every rule should preserve validity, in the sense that if the assumptions in the rule's premise is valid then so is its conclusion. When this holds of a rule it is called sound. When every rule of a proof system is sound, the proof system itself is said to be sound.
+
+Completeness: Naturally we would like the proof system to be strong enough so that all valid partial correctness assertions can be obtained as theorems. We would like the proof system to be complete in this sense. 
