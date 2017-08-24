@@ -819,82 +819,55 @@ handleState(){
 ```
 ###### MemoryGraphCPA
 
-```
 MemoryGraphCPA是整个分析中的核心CPA，用来描述内存中的情况。
 
-对于MgValue，我们主要是参考LLVM_TYPE
-Interface:
-MgValue
-	MgExplicitValue
-	MgSymbolicValue
-====	
-MgValue
-	MgNumericValue
+**graph** - 内存结构
 
-Class:
-MgAbstractMgValue(type, size)
-		MgBitVector(values)
-		MgAbstractMgInterpretedValue
-			MgAbstractMgAggregateValue
-				MgArrayValue(values)
-				MgStructureValue(values)
-			MgAbstractNumericValue
-				MgFloatValue(value)
-				MgIntegerValue(value)
-			MgPointerValue(base, offset, deType)
-		MgAbstractSymbolicValue
-			MgSymbolicIdentifier (id)
-			MgSymbolicExpression
-				MgConstantSymbolicExpression(value:MgValue)
-				MgInstructionExpression(instrunction, operands) -> treat as a AST tree
-				MgUnarySymbolicExpression(operand:MgValue)
-				MyBinarySymbolicExpression(operand1, operand2)
+1. size (负责表示内存块的大小)
+   * MemorySize ：基类
+     * KnownSize ：确定大小，比如全局变量
+     * VariantSize : 可变大小，比如Stack
+     * SymbolicSize ：未知大小，比如malloc出来的内存块
+2. address(用来表示内存地址信息)
+   * MemorySource （stack／global／heap）：表示这个地址是针对哪一种内存类型
+   * MemoryOffsetInterval ：仅用于memory内部明确知道的内存长度[ )
+   * AllocationSite : 内存被申请的位置，用于malloc、alloc内存的标记
+   * BaseAddress：内存块起始标记
+     * HeapBaseAddress : 用于heap，没有确定的起始点，用AllocationSite标记
+     * KnownBaseAddress：用于确定的内存起始位置标记
+       * StackAddress ： stack
+       * GlobalAddress: global
+   * MemoryAddress: 明确知道的物理内存位置 （BaseAddress + offset）
+3. MemoryLocation 用于表示一个具体的内存位置（MemoryAddress + offset）这个偏移是针对stack或者heap的头的偏移，所以读写具体值要算偏移
+4. MemoryRange 仅用于memory外部，表示内存的一块（MemoryLocation + size）
+5. MemoryContent 用于表示内存区间和值的1对n映射 （MemoryOffsetInterval -> MgExpression），这里的地址偏移是局部偏移，针对region的start
+6. FrameLayout 用于记录stack上分配的内存结构 （String -> MemoryOffsetInterval）
+7. MemoryRegion 用于表示一块内存结构，完整的一块，值通过MemoryContent存储
+8. MemoryHeap 用于表示所有的heap的内存块 （MemoryAddress -> MemoryRegion)
+9. MemoryFrame 用于表示所有stack的信息 （FrameLayout, Registers: String -> MgExpression 所有带名字的值包括LLVMregister和函数的参数，这些值如果是指针，指针的便宜地址都是针对全局的偏移, MemoryRegion 存放所有allocate的值, ）
+10. MemoryGraph 用于表示内存结构（MemoryFrame_global, Stack<MemoryFrame>_stack, MemoryHeap_heap）
 
 
-MemoryAddress 是物理内存地址
-	::= base:BaseAddress, offset
-	由两部分组成，一个base基地址，另一个是offset偏移
-BaseAddress 基地址用来区别Global，Stack，Heap
-	KnownBaseAddress 是已知基地址，包括
-		StackBaseAddress 初始时是零，后面遇到函数调用，是在现有地址之上进行偏移
-		GlobalAddress 只有一份，确定
-		
-MemoryInternalRange
-	start - end 用于graph内部，表示一个value的位置
-	
-MemoryRegionSize
-	ExplicitRegionSize: long, for global
-	SymbolicExpresionRegionSize: symbolicExpression
-	VariableRegionSize： 长度可变 for local frame
+**Values** - 内存中的值
 
-FrameLayout
-	::= variables:str->MemoryInternalRange, byteSize: long 
-	byteSize 是整数，遇到一个加一个
-	
-MemoryRegion 代表一块实际的内存区域
-	::= id, size:MemoryRegionSize, start:MemoryAddress, content:MemoryInternalRange->MgValue
-	一块内存，start确定这块内存的位置（global或者是stack或者是heap），
-	content里面就是存的真是的值存的值中，有可能一个range对应多个value
-
-MemoryFrame 代表stack的一层
-	::= region:MemoryRegion, function:Type, layout:FrameLayout, , register:str->MemoryRange
-	对于这样一整块的内存，我们将内容存在region里面，function用来表示函数的类型，layout则用于将变量名对应到偏移
-
-MemoryGraph 代表整个内存的情况，是Immutable 
-	::= stack:MemoryFrame+, global:MemoryFrame, heap:MemoryRegion+
-
-
-====================================
-MemoryLocation 用于Pointer中的地址
-	region，offset -> 可以确定的指向内存的一个位置
-	
-MemoryRange 用于register中
-	MemoryLocation， size -> 可以确定获得register中label对应于哪一个位置
-
-
-```
-
-
+1. MgExpression : 一切的值都是一个表达式
+2. constant 常量
+   * MgConstantValue
+     * MgIntegerValue
+     * MgFloatValue
+     * MgPointerValue
+     * MgNullPointerValue
+     * MgArrayValue
+     * MgStructValue
+3. instexpr
+   * MgBinaryExpression
+   * MgGEPExpression
+   * MgUnaryExpression
+   * MgAggregateExpression
+     * MgAggregateStoreExpression
+     * MgAggregateLoadExpression
+4. symbol
+   * MgSymbolicIdentifier 符号值，带有自增ID
 
 ##### CPA Merge Stop 关系
 
@@ -1101,8 +1074,59 @@ CFA部分用于构造Control-Flow-Automata，这个是我们分析的基础。�
 
 #### ErrorReport
 
+* ReportCollector 全局的错误报告收集器，最后会调用这个来显示报告
+* Weakness 
+  * Weakness 所有我们处理的缺陷的枚举
+* reasonable
+* trace
+  * CfaTrace ： cfa表示的trace
+
+  * ReportTrace [weakness, targetsite, cfatrace, reason]
+
+  * site
+    * ArgSite 有arg的site
+
+    * TargetSite  [Weakness, message, ArgState, CFANode, CFAEdge]
+
+    * ValueCasusedSite 和值有关的site
+
+  * generator
+
+      * TraceGenerator从Site产生错误路径 
+
+      * SimpleArgTraceGenerator
+
+      * ArgBasedTraceGenerator
 
 
+##### Bug Report workflow
+
+所以说，我们现在的error report工作流程是如下
+
+1. 发现bug后，通过throw ReportedException来收集bug， 比如DoubleFreeException
+2. TransferRelation里面会catch ReportingException，创建TargetSite这时候会保存ARGState
+   1. 构造site：weakness [在exception中有]， message [在exception中]，argState这个在globalinfo里面
+   2. site构造trace：反向找argState
+3. 最后在phase里面输出
+
+
+
+##### Exception Enum
+
+MemoryGraphException
+
+* ReportingException
+  * InvalidFree
+    * DoubleFree
+    * FreeNonHeap
+  * InvalidRead
+    * ReadAfterFree
+    * NullPointerDeref
+  * InvalidWrite
+    * WriteAfterFree
+  * AssertionFailure
+  * UnsortedBug
+  * RegionNotExist
 
 
 ### 其他参考
