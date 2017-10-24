@@ -6,4 +6,4 @@ I’m a Ph.D candidate in [Institute of Software System and Engineering](http://
 
 In 2016, I was a visiting student directed by [Prof. Lui Sha ](http://cs.illinois.edu/directory/profile/lrs).
 
-Here, I would like to [share] interesting blogs I have ever read or notes I have taken to deal with specific progblems. Click [here](tomgu1991.github.io) to have a look at my blog!
+Here, I would like to [share] interesting blogs I have ever read or notes I have taken to deal with specific progblems. Click [here](https://tomgu1991.github.io/) to have a look at my blog!
