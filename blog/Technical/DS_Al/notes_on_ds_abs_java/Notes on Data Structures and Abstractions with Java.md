@@ -190,7 +190,7 @@ public interface StackInterface<T> {
 }
 ```
 
-#### **Check balanced delimiters**
+#### Check balanced delimiters
 
 ![](image/5.png)
 
@@ -215,6 +215,23 @@ Parentheses override the rules of operator precedence. We always push an open pa
 #### Evaluate Infix
 
 ![](image/9.png)
+
+### Stack Implementations
+
+#### Linked
+
+```
+public class LinkedStack<T> implements StackInterface<T>{
+  private Node topNode;
+  // constructor
+  // push(T)
+  	// newNode; topNode = newNode
+  // T peek()
+  	// topNode#data
+  // T pop()
+  	// tem = peek();topNode = topNode#next
+}
+```
 
 
 
