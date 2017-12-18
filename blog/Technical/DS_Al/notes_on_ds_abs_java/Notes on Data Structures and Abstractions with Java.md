@@ -235,5 +235,30 @@ public class LinkedStack<T> implements StackInterface<T>{
 
 
 
+### Recursion
 
+Two problem-solving processes involve repetition; they are called iteration and recursion. In fact, most programming languages provide two kinds of repetitive constructs, iterative and recursive.
 
+#### Questions to answer when designing a recursive solution
+
+• What part of the solution can you contribute directly?
+• What smaller but identical problem has a solution that, when taken with your contribution,
+provides the solution to the original problem?
+• When does the process end? That is, what smaller but identical problem has a known
+solution, and have you reached this problem, or base case?
+
+**The definition of a recursive method must contain logic that involves an input—often a parameter—to the method and leads to different cases.** One or more of these cases are base cases, or stopping cases, because they provide a solution that does not require recursion. One or more cases include a recursive invocation of the method that takes a step toward a base case by solving a “smaller” version of the task performed by the method.
+
+A recursive method uses more memory than an iterative method, in general, because each recursive call generates an activation record.
+
+#### Tower of Hanoi
+
+![](image/10.png)
+
+#### Tail recursion
+
+Tail recursion occurs when the last action performed by a recursive method is a recursive call. 
+
+#### Indirect recursion
+
+Some recursive algorithms make their recursive calls indirectly. For example, we might have the following chain of events: Method A calls Method B, Method B calls Method C, and Method C calls Method A. Such recursion—called indirect recursion—is more difficult to understand and trace, but it does arise naturally in certain applications.
