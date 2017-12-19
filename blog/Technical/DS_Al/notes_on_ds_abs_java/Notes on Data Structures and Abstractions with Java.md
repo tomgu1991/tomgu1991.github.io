@@ -262,3 +262,113 @@ Tail recursion occurs when the last action performed by a recursive method is a 
 #### Indirect recursion
 
 Some recursive algorithms make their recursive calls indirectly. For example, we might have the following chain of events: Method A calls Method B, Method B calls Method C, and Method C calls Method A. Such recursion—called indirect recursion—is more difficult to understand and trace, but it does arise naturally in certain applications.
+
+### Queue, Deque, Priority Queue 
+
+Like a stack, the ADT queue organizes its entries according to the order in which they were added. But while a stack has a last-in, first-out behavior, a queue exhibits a first-in, first-out, or **FIFO**, behavior.
+
+The operation that adds an entry to a queue is traditionally called enqueue (pronounced “N-Q”). The operation to remove an entry is dequeue (pronounced “D-Q”). The operation that retrieves the queue’s front entry is called getFront. 
+
+```java
+public interface QueueInterface<T> {
+  public void enqueue(T newEntry);
+  public T dequeue();
+  public T getFront();
+  public boolean isEmpty();
+  public void clear();
+}
+```
+
+#### Double-ended queue (Deque "deck")
+
+```java
+public interface DequeInterface<T> {
+  public void addToFront(T newEntry);
+  public void addToBack(T newEntry);
+  public T removeFront();
+  public T removeBack();
+  public T getFront();
+  public T getBack();
+  public boolean isEmpty();
+  public void clear();
+}
+```
+
+![](image/11.png)
+
+#### Priority Queue
+
+The ADT priority queue organizes objects according to their priorities. Exactly what form a prior- ity takes depends on the nature of the object. 
+
+```java
+public interface PriorityQueueInterface<T extends Comparable<? super T>> {
+  public void add(T newEntry);
+  public T remove();
+  public T peek();
+  public boolean isEmpty();
+  public int getSize();
+  public void clear();
+}
+```
+
+
+
+### Queue implementations
+
+#### Queue
+
+Adding a tail reference—an external reference to the last node in the chain—is one approach to this problem and is the one we will take here.
+
+```java
+public class LinkedQueue<T> implements QueueInterface<T> {
+  private Node firstNode;
+  private Node lastNode;
+  
+  // enqueue(T)
+  	// newNode;
+  	// if empty -> firstNode = newNode; else lastNode#next = newNode
+  	// lastNode = newNode
+  // getFront()
+  	// notEmpt() -> firstNode#data; null
+  // dequeue()
+  	// front = firstNode#data, firstNode= firsNode#next
+  // isEmpty()
+  	// firstNode and lastNode both null
+}
+```
+
+#### Deque
+
+Doubly linked chain
+
+```java
+public class DLNode {
+  private T data;
+  private DLNode next;
+  private DLNode previous;
+}
+
+public class LinkedDeque<T> implements DequeInterface<T> {
+  private DLNode first;
+  private DLNode last;
+  // addToBack
+  	// newNode(last, newEntry, null)
+  	// empty? first = newNode: last#next=new
+  	// last = new
+  // addToFront
+  	// newNode(null, newEntry, first)
+  	// empty? last = newNode : first#pre = newNode
+  	// first = newNode
+  // removeFront
+  	// empty -> null
+  	// front = first#data
+  	// first = first#next
+  		// first null? last = null : first#pre = null
+  // removeBack
+  	// empty -> null
+  	// back = last#data
+  	// last = last#prev
+  		// last null ? first = null : last#next = null
+}
+```
+
