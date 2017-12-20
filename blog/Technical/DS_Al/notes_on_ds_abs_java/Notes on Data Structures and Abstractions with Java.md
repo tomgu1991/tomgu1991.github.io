@@ -372,3 +372,99 @@ public class LinkedDeque<T> implements DequeInterface<T> {
 }
 ```
 
+### Lists
+
+```java
+public interface ListInterface<T> {
+  public void add(T newEntry);
+  public boolean add(int pos, T newEntry);
+  public T remove(int pos);
+  public void clear();
+  public boolean replace(int pos, T newEntry);
+  public T getEntry(int pos);
+  public boolean contains(T anEntry);
+  public int getLength();
+  public boolean isEmpty();
+  public T[] toArray();
+}
+```
+
+### Lists implementation as Arrays
+
+```java
+public class AList<T> implements ListInterface<T> {
+  private T[] list:
+  private int num;
+  // constructor
+  
+  // ensureCapacity
+  	// if num == list.length
+  		// list = Arrays.copyof(list, 2*list.length)
+  // makeRoom(pos)
+  	// check pos; nIndex = pos -1;
+  	// for lastIndex to nIndex -> list[index+1] = list[index]
+  // removeGap(pos)
+  	// check pos; rIndex = pos-1;
+  	// for rIndex to lastIndex -> list[index] = list[index+1]
+  
+  // add(T)
+  	// ensureCapacity();
+  	// list[num] = T
+  	// num++;
+  // toArray
+  	// build array
+  // add(pos, T)
+  	// check pos; ensureCap; makeRoom(pos),list[pos-1]=T;num++
+  // remove(pos)
+  	// check pos; result = list[pos-1];
+  	// removeGap(pos);num--
+  // replace | getEntry ==> easy
+  // contains
+  	// for to check
+}
+```
+
+### Lists implementation as Linked Data
+
+```java
+public class LList<T> implements ListInterface<T> {
+  private Node first;
+  private Node last;
+  private int num;
+  // getNodeAt(pos)
+  	// check pos
+  	// for counter=1 to pos; currentNode = currentNode#next; return currentNode
+  
+  // add(T)
+  	// if empty -> first = last = newNode
+  	// else -> last#next=newNode; last = newNode
+  	// num++
+  // add(pos, T)
+  	// check pos
+  	// pos = 1; newNode#next = first;first = newNode
+  	// pos !=1;
+  		//bef=getNodeAt(pos); 	
+  		//aft=nodeBefore#next;
+  		//bef#next=newNode;newNode#nex=aft
+  	// num++
+  // isEmpty()
+  	// check num
+  // remove(pos)
+  	// check pos;
+  	// pos = 1; first = first#next;
+  	// pos !=1;
+  		// bef = getNodeAt(pos-1);rmv = bef#next;aft=rmv#next
+  		// bef#next=aft
+  	// num--
+  // replace(pos, T)
+  	// node = getNodeAt(pos); node#data=T
+  // getEntry
+  	// node = getNodeAt(pos); node#data
+  // contains(T)
+  	// while
+  
+}
+```
+
+![](image/12.png)
+
