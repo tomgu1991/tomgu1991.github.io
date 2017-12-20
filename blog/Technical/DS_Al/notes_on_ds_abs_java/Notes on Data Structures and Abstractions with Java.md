@@ -503,3 +503,89 @@ For array-based, inner class has `nextIndex` and `wasNextCalled` for index and r
 
 Both separate class iterators and inner class iterators enable us to have several distinct iterations of a data collection in progress at the same time. Because inner class iterators have direct access to the structure containing the ADT’s data, they can execute faster than separate class iterators, and so are usually preferable.
 
+### Sorted List
+
+```java
+public interface SortedListInterface<T extends Comparable<? super T>> {
+  public void add(T nEntry);
+  public boolean remove(T anEntry);
+  public int getPosition(T anEntry);
+  public T getEntry(int givenPosition);
+  public boolean contains(T anEntry); 
+  public T remove(int givenPosition); 
+  public void clear();
+  public int getLength();
+  public boolean isEmpty();
+  public T[] toArray();
+}
+```
+
+```java
+public class SortedLinkedList<T extends Comparable<? super T>> implements SortedListInterface<T> {
+  private Node first;
+  private int num;
+  // getNodeBef(e)
+  	// while(cur!=null && e.compareTo(cur) > 0)
+  		// bef = cur;cur=cur#next
+  // add
+  	// newNode; bef=getNodeBef(newNode)
+  	// if empty -> new#next(first); first=newNode
+  	// else -> aft=bef#next;new#next=aft;bef#next=newNode
+  	// num++
+}
+```
+
+![](image/13.png)
+
+### Dictionaries
+
+The dictionary, map, table contains entries that each have two parts: keyword and value.
+
+```java
+public interface DictionaryInterface<K, V> {
+  public V add(K key, V value);
+  public V remove(K key);
+  public V getValue(K key);
+  public boolean contains(K key);
+  public Iterator<K> getKeyIterator();
+  public Iterator<V> getValueIterator();
+  public boolean isEmpty();
+  public int getSize();
+  public void clear();
+}
+```
+
+The simplest way to specify white space and punctuation as delimiters is to use the notation \W, since it represents any character other than a letter, digit, or underscore. We then write useDelimiter’s argument as "\\W+". Remember that we must duplicate the backslash to distinguish the notation from an escape character. The plus sign means one or more occurrences of. Thus, the statement
+             dataFile.useDelimiter("\\W+");
+sets the delimiters to one or more occurrences of punctuation, white-space characters, and some other characters that will not occur in our data.
+
+### Dictionary Implementation
+
+```java
+private class Entry<S, T> {
+  private S key; 
+  private T value;
+}
+public class ArrayDictionary<K, V> implements DictionaryInterface<K, V> {
+  private Entry<K, V>[] dictionary; // array of unsorted entries 
+  private int numberOfEntries;
+  private final static int DEFAULT_CAPACITY = 25;
+
+  // localIndex(k)
+  	// while -> equals
+  
+  // add(k,v)
+  	// key=localIndex(k)
+  	// key < num -> dic[key]#data=v
+  	// else -> dic[num] = new Entry(k,v)
+  	// num++
+  // remove
+  	// exist -> index, delete index, move last here
+  	// not -> 
+}
+```
+
+![](image/14.png)
+
+
+
