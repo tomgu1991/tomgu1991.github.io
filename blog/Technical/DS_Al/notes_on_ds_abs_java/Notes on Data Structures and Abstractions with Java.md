@@ -468,3 +468,38 @@ public class LList<T> implements ListInterface<T> {
 
 ![](image/12.png)
 
+### Iterators
+
+An iterator is an object that traverses a collection of data. 
+
+Notice that the previous loop is at the client level, since it uses the ADT operation getEntry to access the list. For an array-based implementation of the list, getEntry can retrieve the desired array entry directly and quickly. But if a chain of linked nodes represents the list’s entries, getEntry must move from node to node until it locates the desired one. For example, to retrieve the nth entry in the list, getEntry would begin at the first node in the chain and then move to the second node, the third node, and so on until it reached the nth node. At the next repetition of the loop, getEntry would retrieve the n + 1st entry in the list by beginning again at the first node in the chain and stepping from node to node until it reached the n + 1st node. This wastes time.
+
+```java
+public interface ListWithIteratorInterface<T> extends ListInterface<T> {
+  public Iterator<T> getIterator();
+}
+
+public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T> {
+  public Iterator<T> getIterator() {
+	return new IteratorForLinkedList(); 
+  } // end getIterator
+
+  private class IteratorForLinkedList implements Iterator<T> {
+    private Node nextNode;
+    private IteratorForLinkedList() {
+      nextNode = firstNode;
+    }
+    // other methods
+    // public T next()
+    	// nextNode = nextNode#next
+    	// return nextNode#data
+    // public boolean hasNext()
+    	// nextNode != null
+  }
+}
+```
+
+For array-based, inner class has `nextIndex` and `wasNextCalled` for index and remove operation.
+
+Both separate class iterators and inner class iterators enable us to have several distinct iterations of a data collection in progress at the same time. Because inner class iterators have direct access to the structure containing the ADT’s data, they can execute faster than separate class iterators, and so are usually preferable.
+
