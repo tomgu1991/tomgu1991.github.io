@@ -589,3 +589,91 @@ public class ArrayDictionary<K, V> implements DictionaryInterface<K, V> {
 
 
 
+### Hashing
+
+This chapter introduces a technique called hashing that ideally can result in O(1) search times. Hashing can be an excellent choice for implementing a dictionary when searching is the primary task. But as good as hashing can be, it is not always appropriate. For example, hashing cannot provide a traversal of the search keys in sorted order.
+
+Hashing is a technique that determines this index using only an entry’s search key, without searching. The array itself is called a hash table.
+
+A hash function takes a search key and produces the integer index of an element in the hash table. This array element is where you would either store or look for the search key’s associated value.
+
+We say that the telephone number—that is, the search key—maps, or hashes, to the index i. This index is called a hash index. Sometimes we will say that the search key maps, or hashes, into the table location at the index i.
+
+**Typical hashing:** 
+**Convert** the search key to an integer called the **hash code** and **Compress** the hash code into the range of indices for the hash table. Typical hash functions are not perfect, because they can allow more than one search key to map into a single index, causing a collision in the hash table.
+
+The hash function that the algorithm getHashIndex describes is not a perfect hash function when tableSize is less than 10,000. Since 10,000 telephone numbers map into tableSize indices, some telephone numbers will map into the same index. We call such an occurrence a collision. 
+
+**Hash Functions**: Any function can be a hash function if it produces an integer that is suitable as an array index. But a good function should - Minimize collisions and Be fast to compute
+
+**Guidelines for the method hashCode**
+* If a class overrides the method equals, it should override hashCode.
+* If the method equals considers two objects equal, hashCode must return the same
+  value for both objects.
+* If you call an object’s hashCode more than once during the execution of a program,
+  and if the object’s data remains the same during this time, hashCode must return the
+  same hash code.
+* An object’s hash code during one execution of a program can differ from its hash
+  code during another execution of the same program.
+
+
+**Hash code for a string**: Specifically, if the string s has n charac- ters, let ui be the Unicode value for the ith character in s (i is zero for the first character). Then the hash code can have the form, (u_0g^n-1 + ... + u_n-1), where g is positive constant.
+
+**Hash code for a primitive type**: use int or manipulate their internal binary representations. Instead of ignoring a part of a long search key, divide it into several pieces. Then combine the pieces by using either addition or a bit-wise boolean operation such as exclusive or. This pro- cess is called **folding**.
+
+The most common way to scale an integer so that it lies within a given range of values is to use Java’s % operator. So, n should equal the size of the hash table, but not any n will do. For example, if n is even, c % n has the same parity as c—that is, if c is even, c % n is even; if c is odd, c % n is odd. If the hash codes are biased toward either even or odd values (and note that hash codes based on mem- ory addresses are typically even), the indices to the hash table will have the same bias. Instead of a uniform distribution of indices, you will leave out the indices of many table locations if n is even. Thus, n—**the size of the hash table—always should be an odd number**. **When n is a prime number**—one that is divisible only by 1 and itself—c % n provides values that are distributed throughout the index range 0 through n - 1. Prime numbers—with the excep- tion of 2—are odd.
+
+```java
+private int getHashIndex(K key) {
+  int hashIndex = key.hashCode() % hashTable.length; 
+  if (hashIndex < 0)
+    hashIndex = hashIndex + hashTable.length; 
+  return hashIndex;
+}
+```
+
+#### **Resolving Collisions** : 
+
+When adding to a dictionary, if your hash function maps a search key into a location in the hash table that is already in use, you need to find another spot for the search key’s value. 
+
+* Use another location in the hash table. Finding an unused, or open, location in the hash table is called **Open addressing**.
+
+  * Locating an open location in the hash table is called **probing**, and various probing techniques are possible. With **linear probing**, if a collision occurs at hashTable[k], we see whether hashTable[k + 1] is available. The table locations that we consider in this search make up the probe sequence.  ===> additions that collide. Collisions that are resolved with linear probing cause groups of consecutive locations in the hash table to be occupied. Each group is called a **cluster**, and the phenomenon is known as primary clustering. 
+
+    ![](image/15.png)
+
+  * You can avoid primary clustering by changing the probe sequence that you use to resolve a colli- sion. As we discussed in the previous section, if a given search key hashes to index k, linear prob- ing looks at the consecutive locations beginning at index k. **Quadratic probing**, on the other hand, considersthelocationsatindicesk+j2 forj≥0—thatis,itusestheindicesk,k+1,k+4,k+9,and so on. 
+
+    ![](image/16.png)
+
+  * **Double hashing** : Double hashing uses a second hash function to compute these increments in a key-dependent way. In this way, double hashing avoids both pri- mary and secondary clustering.
+
+    ![](image/17.png)
+
+  * **Problems**: Recall that only empty locations contain null. Frequent additions and removals can cause every location in the hash table to reference either a current entry or a former entry. That is, a hash table might have no location that contains null, regardless of how many or how few entries are actually in the dictionary. If this happens, our approach to searching a probe sequence will not work. Instead, every unsuccessful search can end only after considering every location in the hash table. Also, detecting the end of the search will be somewhat more involved and costly than simply looking for null.
+
+* Change the structure of the hash table so that each array location can represent more than one value. Such a location is called a **bucket**. Anytime a new search key maps into a particular location, you simply place the key and its associated value in the bucket, much as we did with open addressing. **Either a linked implementation of a list or a chain of linked nodes** is a reasonable choice for a bucket, since memory is allocated to the bucket only as needed. Notice that a node must ref- erence the search key so that you can locate it later when you search the chain. Resolving colli- sions by using buckets that are linked chains is called **separate chaining**.
+
+
+  #### Efficiency of Hashing
+
+Resolving a collision takes time and thus causes the dictionary operations to be slower than an O(1) operation. As a hash table fills, collisions occur more often, decreasing performance even fur- ther. Since collision resolution takes considerably more time than evaluating the hash function, it is the prime contributor to the cost of hashing.
+
+**Load factor**: This measure—theload factor λ—is the ratio of the size of the dictionary to the size of the hash table. For open address- ing, λ does not exceed 1. For separate chaining, λ has no maximum value.
+
+* **Separate Chaining**: That is, λ is the average number of dictionary entries per chain. An unsuccessful search of a hash table sometimes will encounter an empty chain, and so that operation is O(1) and would be the best case. But for the average case when the chains are not sorted, searching for an entry in the hash table without success examines λ nodes. an average successful search considers a chain of λ nodes and locates the desired entry after looking at λ/2 of them.
+
+  ![](image/18.png)
+
+* Linear probing:
+
+  ![](image/19.png)
+
+* Quadratic probing and double hashing:
+
+  ![](image/20.png)
+
+
+#### Rehashing
+
+After creating a new, larger hash table of an appropriate size, you use the dictionary method add to add each item in the original hash table to the new table. The method computes the hash index using the size of the new table and handles any collisions. This process of enlarging a hash table and computing new hash indices for its contents is called rehashing. You can see that increas- ing the size of a hash table requires considerably more work than increasing the size of an ordinary array. Rehashing is a task that you should not do often.
