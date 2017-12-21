@@ -677,3 +677,224 @@ Resolving a collision takes time and thus causes the dictionary operations to be
 #### Rehashing
 
 After creating a new, larger hash table of an appropriate size, you use the dictionary method add to add each item in the original hash table to the new table. The method computes the hash index using the size of the new table and handles any collisions. This process of enlarging a hash table and computing new hash indices for its contents is called rehashing. You can see that increas- ing the size of a hash table requires considerably more work than increasing the size of an ordinary array. Rehashing is a task that you should not do often.
+
+### Trees
+
+A tree provides a hierarchical organization in which data items have ancestors and descendants. The organization is richer and more varied than any you have seen previously.  As useful as these organizations are, you often must categorize data into groups and subgroups. Such a classification is **hierarchical**, or **nonlinear**, since the data items appear at various levels within the organization.
+
+A **tree** is as set of nodes connected by **edges** that indicate the relationships among the nodes. The nodes are arranged in **levels** that indicate the nodes’ hierarchy. At the top level is a single node called the **root**. The nodes at each successive level of a tree are the children of the nodes at the previous level. A node that has children is the **parent** of those **children**. Since these children have the same parent, they are called **siblings**. They also are the descendants of node A, and node A is their ancestor. Furthermore, node P is a descendant of A, and A is an ancestor of P. Notice that node P has no children. Such a node is called a leaf. A node that is not a **leaf**—that is, one that has children—is called either an **interior node** or a **nonleaf**. Such a node is also a parent. Any node and its descendants form a **subtree** of the original tree. A **subtree of a node** is a tree rooted at a child of that node. A **subtree of a tree** is a subtree of the tree’s root. The **height** of a tree is the number of levels in the tree. Root is 1.
+
+We can reach any node in a tree by following a **path** that begins at the root and goes from node to node along the edges that join them. The path between the root and any other node is unique. The **length of a path** is the number of edges that compose it. 
+
+**Binary trees.** As we mentioned earlier, each node in a binary tree has at most two children. They are called the left child and the right child. When a binary tree of height h has all of its leaves at level h and every nonleaf (parent) has exactly two children, the tree is said to be **full**. If all levels of a binary tree but the last contain as many nodes as possible, and the nodes on the last level are filled in from left to right—as in Figure 23-6b—the tree is **complete**. 
+
+**Complete balanced tree**: 二叉树每个节点有两棵高度完全相等的子树。如果高度差不大于一，则是**height balanced**。
+
+In defining a **traversal**, or iteration, of a tree, we must **visit**, or process, each data item exactly once. However, the order in which we visit items is not unique. We can choose an order suitable to our application. **Preorder traversal**, root first, **Depth-first traversal**. **Inorder traversal**, root in the middle. **Postorder traversal** visits the root last. **Lever-order traversal** visits nodes one level at a time, it is a kind of **breadth-first traversal**. 
+
+```java
+public interface TreeInterface<T> {
+  public T getRootData();
+  public int getHeight();
+  public int getNumberOfNodes(); 
+  public boolean isEmpty(); 
+  public void clear();
+}
+
+public interface TreeIteratorInterface<T> {
+  public Iterator<T> getPreorderIterator(); 
+  public Iterator<T> getPostorderIterator(); 
+  public Iterator<T> getInorderIterator(); 
+  public Iterator<T> getLevelOrderIterator();
+}
+
+public interface BinaryTreeInterface<T> extends TreeInterface<T>, TreeIteratorInterface<T> {
+  public void setTree(T rootData);
+  public void setTree(T rootData, BinaryTreeInterface<T> leftTree,     		
+                      BinaryTreeInterface<T> rightTree);
+}
+```
+
+​		
+The root of the tree contains the operator / and the root’s children contain the operands for the operator. Notice that the order of the children matches the order of the operands. Such a binary tree is called an **expression tree**. 
+
+
+**An expert system** helps its users solve problems or make decisions.Such a program might help you pick a major or apply for financial aid. It reaches a conclusionbased upon your answers to a series of questions. **A decision tree** can be the basis of an expert system. Each parent (nonleaf) in a decision tree isa question that has a finite number of responses. For example, we might use questions whoseanswers are true or false, yes or no, or multiple choice. Each possible answer to the question corre-sponds to a child of that node. Each child might be an additional question or a conclusion. Nodesthat are conclusions would have no children, and so they would be leaves.	
+
+A **search tree**, on the other hand, organizes its data so that a search can be more efficient. A **binary search tree** is a binary tree whose nodes contain Comparable objects and are organized as follows: The node’s data is greater than all the data in the node’s left subtree, The node’s data is less than all the data in the node’s right subtree
+
+**Heap**: A heap is a complete binary tree whose nodes contain Comparable objects and are
+organized as follows. Each node contains an object that is no smaller (or no larger) than the objects in its descendants. In a **maxheap**, the object in a node is greater than or equal to its descendant objects. In a **minheap**, the relation is less than or equal to.
+
+### Tree implementation
+
+​	stack -> inorder
+
+​	queue -> level order
+
+```java
+interface BinaryNodeInterface<T> {
+  public T getData();
+  public void setData(T newData);
+  public BinaryNodeInterface<T> getLeftChild();
+  public BinaryNodeInterface<T> getRightChild();
+  public void setLeftChild(BinaryNodeInterface<T> leftChild);
+  public void setRightChild(BinaryNodeInterface<T> rightChild);
+  public boolean hasLeftChild();
+  public boolean hasRightChild();
+  public boolean isLeaf();
+  public int getNumberOfNodes();
+  public int getHeight();
+}
+
+public interface BinaryTreeInterface<T> extends TreeInterface<T>, 
+		TreeIteratorInterface<T> {
+  public void setTree(T rootData);
+  public void setTree(T rootData, BinaryTreeInterface<T> leftTree, 
+                      BinaryTreeInterface<T> rightTree);
+}
+
+class BinaryNode<T> implements BinaryNodeInterface<T> {
+  private T data;
+  private BinaryNode<T> left; 
+  private BinaryNode<T> right;
+  
+  public BinaryNodeInterface<T> copy() {
+    BinaryNode<T> newRoot = new BinaryNode<T>(data); 
+    if (left != null)
+      newRoot.left = (BinaryNode<T>)left.copy();
+	if (right != null)
+	  newRoot.right = (BinaryNode<T>)right.copy();
+	return newRoot; } // end copy
+  
+  public int getHeight() {
+	return getHeight(this); // call private getHeight 
+  } // end getHeight
+  
+  private int getHeight(BinaryNode<T> node) {
+	int height = 0;
+	if (node != null)
+		height = 1 + Math.max(getHeight(node.left),
+                              getHeight(node.right));
+	return height; 
+  } // end getHeight
+  
+  public int getNumberOfNodes() {
+    int leftNumber = 0; int rightNumber = 0;
+	if (left != null)
+	  leftNumber = left.getNumberOfNodes();
+	if (right != null)
+	  rightNumber = right.getNumberOfNodes();
+	  return 1 + leftNumber + rightNumber; 
+  } // end getNumberOfNodes
+    
+}
+
+public class BinaryTree<T> implements BinaryTreeInterface<T> {
+  private BinaryNodeInterface<T> root;
+  
+  private void privateSetTree(T rootData, BinaryTree<T> leftTree,
+                                                   BinaryTree<T> rightTree){
+    root = new BinaryNode<T>(rootData);
+	if ((leftTree != null) && !leftTree.isEmpty())
+      root.setLeftChild(leftTree.root.copy());
+    if ((rightTree != null) && !rightTree.isEmpty())
+      root.setRightChild(rightTree.root.copy());
+  } // end privateSetTree
+  
+  public int getHeight() {
+	return root.getHeight(); } // end getHeight
+
+  public int getNumberOfNodes() {
+	return root.getNumberOfNodes(); } // end getNumberOfNodes
+
+}
+```
+
+```java
+private class InorderIterator implements Iterator<T> {
+  private StackInterface<BinaryNodeInterface<T>> nodeStack; 
+  private BinaryNodeInterface<T> currentNode;
+  
+  public InorderIterator() {
+    nodeStack = new LinkedStack<BinaryNodeInterface<T>>();
+    currentNode = root;
+   } // end default constructor
+
+  public boolean hasNext() {
+	return !nodeStack.isEmpty() || (currentNode != null); 
+  } // end hasNext
+  
+  public T next() {
+	BinaryNodeInterface<T> nextNode = null;
+      // find leftmost node with no left child
+	while (currentNode != null) {
+         nodeStack.push(currentNode);
+         currentNode = currentNode.getLeftChild();
+    } // end while
+      // get leftmost node, then move to its right subtree
+	if (!nodeStack.isEmpty()) {
+		nextNode = nodeStack.pop();
+		assert nextNode != null; // since nodeStack was not empty
+                                  // before the pop
+        currentNode = nextNode.getRightChild();
+     }else
+		throw new NoSuchElementException();
+	return nextNode.getData(); 
+  } // end next
+
+
+	
+}
+```
+
+PreOrder
+
+```
+1. result = currentNode#data
+2. push(current#right)
+3. current= current#left
+```
+
+PostOrder
+
+```
+self, left
+if no left, right,
+if no right, end
+pop one,return result, currentNode = stack.peek#right
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Cloneable Objects
+
+Two ways to copy. What does this method clone actually do? You want it to make copies of the datafields associated with the invoking object. When a data field is an object, you can copy it in one oftwo ways:
+
+• You can copy the reference to the object and share the object with the clone, as illustrated inFigure 30-4a. This copy is called a shallow copy; the clone is a **shallow** clone.
+
+• You can copy the object itself, as illustrated in Figure 30-4b. This copy is called a deep copy;the clone is a **deep** clone.
+
+
+
+
+
+
+
+
+
+
