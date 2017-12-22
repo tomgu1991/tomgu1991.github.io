@@ -867,17 +867,141 @@ pop one,return result, currentNode = stack.peek#right
 
 
 
+### Graph
+
+In a graph, the circles are called **vertices**, or **nodes**, and the lines are called **edges**. A **graph**, then, is a collection of distinct vertices and distinct edges. A **subgraph** is a portion of a graph that is itself a graph, just as the road map in Figure 28-1 actually is a part of a larger map.
+
+Since you can travel in both directions along the roads in Figure 28-1, the corresponding graph and its edges are said to be **undirected**. But cities often have one-way streets. The graph in Figure 28-2 has a vertex for each intersection in a city’s street map. The edges each have a direction and are called directed edges. A graph with directed edges is called a **directed** graph, or digraph. You can transform an undirected graph into a directed graph by replacing each undirected edge with two directed edges that have opposite directions.
+
+Paths. A **path** between two vertices in a graph is a sequence of edges. A path in a directed graph must consider the direction of the edges, and is called a **directed** path. The **length** of a path is the number of edges that it comprises. If the path does not pass through any vertex more than once, it is a **simple path**.
+
+A **cycle** is a path that begins and ends at the same vertex. A **simple cycle** passes through other vertices only once each. In Figure 28-1, the cycle Chatham-Hyannis-Barnstable-Orleans-Chatham is a simple cycle. A graph that has no cycles is **acyclic**.
+
+You use a** weighted graph**, which has values on its edges. These values are called either weights or **costs**. 
+
+A graph that has a path between every pair of distinct vertices is **connected**. A **complete graph** goes even further; it has an edge between every pair of distinct vertices. 
+
+Two vertices are **adjacent** in an **undirected** graph if they are joined by an edge. Called **neighbors**. In a **directed** graph, vertex i is adjacent to vertex j if a directed edge begins at j and ends at i.
+
+A graph is **sparse** if it has relatively few edges(O(n). It is **dense** if it has many edges(O(n^2)).
+
+A traversal of a tree visits all of the tree’s nodes beginning with the root. However, a graph tra- versal begins at any vertex—called the **origin vertex**—and visits only the vertices that it can reach. Only when a graph is connected can such a traversal visit all the vertices.
+
+This graph has no cycles. In a directed graph without cycles, we can arrange the vertices so that vertex a precedes vertex b whenever a directed edge exists from a to b. The order of the vertices in this arrangement is called a **topological order**. The process that discovers a topological order for the vertices in a graph is called a **topological sort**. 
+
+#### BFS
+
+```java
+Algorithm getBreadthFirstTraversal(originVertex) {
+  traversalOrder = anewqueuefortheresultingtraversalorder 
+  vertexQueue = anewqueuetoholdverticesastheyarevisited
+    
+  Mark originVertex as visited 
+  traversalOrder.enqueue(originVertex) 
+  vertexQueue.enqueue(originVertex)
+  
+  while (!vertexQueue.isEmpty()) {
+	frontVertex = vertexQueue.dequeue() 
+	while (frontVertex has a neighbor) {
+	  nextNeighbor = nextneighboroffrontVertex 
+	  if (nextNeighbor is not visited) {
+	    Mark nextNeighbor as visited 
+	    traversalOrder.enqueue(nextNeighbor) 
+	    vertexQueue.enqueue(nextNeighbor)
+	  }
+	}
+  }
+  return traversalOrder
+}
+```
+
+#### DFS
+
+```java
+Algorithm getDepthFirstTraversal(originVertex) {
+  traversalOrder = anewqueuefortheresultingtraversalorder 
+  vertexStack = anewstacktoholdverticesastheyarevisited
+  
+  Mark originVertex as visited 
+  traversalOrder.enqueue(originVertex) 
+  vertexStack.push(originVertex)
+  
+  while (!vertexStack.isEmpty()) {
+	topVertex = vertexStack.peek()
+	if (topVertex has a nunvisited neighbor) {
+		nextNeighbor = nextunvisitedneighboroftopVertex 
+        Mark nextNeighbor as visited 
+        traversalOrder.enqueue(nextNeighbor) 
+        vertexStack.push(nextNeighbor)
+	} else // all neighbors are visited 
+      vertexStack.pop()
+  }
+  return traversalOrder
+}
+```
+
+#### Topological Order
+
+```
+Algorithm getTopologicalOrder()
+vertexStack = a new stack to hold vertices as they are visited 
+numberOfVertices = number of vertices in the graph
+for (counter = 1 to numberOfVertices)
+{
+nextVertex = an unvisited vertex whose neighbors,if any,are all visited 
+Mark nextVertex as visited
+vertexStack.push(nextVertex)
+}
+return vertexStack
+```
+
+#### Shortest Path in an Unweighted Graph
+
+Use bfs to update neighbors, (node,length, predecessor)
+
+![](image/21.png)
 
 
 
+#### The shortest path in a weighted graph
 
+priorityqueue, each time update the neighbor and put in queue, if visited not process.  Notice it is priorityqueue, so , each time we only handle the shortest path to current node.
 
+![](image/22.png)
 
+### Graph implementation
+Two common implementations of the ADT graph use either an array or a list to represent the graph’s edges. The array is typically a two-dimensional array called an **adjacency matrix**. The list is called an adjacency list. Each of these constructs represents the connections—that is, the edges—among the vertices in the graph.
 
+From an adjacency matrix, you quickly can see whether an edge exists between any two given ver- tices. This operation is O(1). But if you want to know all the neighbors of a particular vertex, you need to scan an entire row of the matrix, an O(n) task. Additionally, the matrix occupies a consider- able, fixed amount of space that depends on the number of vertices but not on the number of edges.
 
+An adjacency list for a given vertex represents only those edges that originate from the vertex.
 
+```java
+class Vertex<T> implements VertexInterface<T> {
+  private T label;
+  private ListWithIteratorInterface<T> edgeList;
+  private boolean visited;
+  private VertexInterface<T> previousVertex;
+  private double cost;
+  
+  public boolean connect(VertexInterface<T> endVertex, double edgeWeight){
+    // check exist
+  }
+  public boolean hasNeighbor(){}
+  public VertexInterface<T> getUnvisitedNeighbor(){}
+}
 
+public class DirectedGraph<T> implements GraphInterface<T> {
+  private DictionaryInterface<T, VertexInterface<T>> vertices;
+  private int edgeCount;
+  
+  public boolean addVertex(T vertexLabel){}
+  public boolean addEdge(T begin, T end, double edgeWeight){}
+  public boolean hasEdge(T begin, T end){}
+}
+```
 
+![](image/23.png)
 
 
 
