@@ -71,6 +71,7 @@ for -> n
 insert -> from begin to end, O(n^2)
 
 Best: n
+Averate: n^2
 Worst: n^2
 ```
 
@@ -78,5 +79,45 @@ Worst: n^2
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/insertion)
 
+### Shell Sorting
 
+**Heuristic**
+
+Donald Shell devised in 1959 an improved insertion sort, now called the Shell sort. Shell wanted entries to move beyond their adjacent locations. To do so, he sorted subarrays of entries at equally spaced indices. Instead of moving to an adjacent loca- tion, an entry moves several locations away. The result is an array that is almost sorted—one that can be sorted efficiently by using an ordinary insertion sort.
+
+**Pseudocode**
+
+```
+Algorithm incrementalInsertionSort(a, first, last, space)
+// sort a from first to last by space 
+for unsorted = first+space to last by space
+	nextToInsert = a[unsorted]
+	index = unsorted - space
+	while( index >= first && nextToInsert<a[index])
+		a[index+space] = a[index] // move
+	a[index+space] = nextToInsert
+```
+
+```
+Algorithm shellSort(a, first, last)
+// sort a from first to last
+space = n/2
+while(space > 0)
+	for begin=first to first+space-1
+		// sort subarray
+		incrementalInsertionSort(a, first, last, space)
+	space /= 2
+```
+
+**Efficiency**
+
+```
+Best:n
+Average:n^1.5
+Worst:n^1.5
+```
+
+**Implementation**
+
+[here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/shell)
 
