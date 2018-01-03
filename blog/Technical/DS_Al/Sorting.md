@@ -121,3 +121,54 @@ Worst:n^1.5
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/shell)
 
+### Merge Sorting
+
+**Heuristic**
+
+The merge sort divides an array into halves, sorts the two halves, and then merges them into one sorted array. The algorithm for merge sort is usually stated recursively.  The strategy is said to be a **divide and conquer**
+
+**Pseudocode**
+
+```
+Algorithm mergeSort(a, temArray, first, last)
+// sort a from first to last, save into temArray
+if first<last
+	mid = first+last / 2
+	mergeSort(a, temArray, first, mid)
+	mergeSort(a, temArray, mid+1, last)
+	merge(a, temArray, first, mid, last) // merge into one
+```
+
+```
+Algorithm merge(a, temArray, first, mid, last)
+// merge two sub_array into temArray
+bF1 = first, bF2 = mid+1
+eF1 = mid, eF2 = last
+index=0
+while(bF1<=eF1 && bF2<=eF2){
+  // merge
+  if a[bF1] <= a[bF2]
+  	temArray[index]=a[bF1]
+  	bF1++
+  else
+  	temArray[index]=a[bF2]
+  	bF2++
+  index++
+}
+if(bF1<eF1) copy left
+if(bF2<eF2) copy left
+copy from tempArray to a
+```
+
+**Efficiency**
+
+```
+Best:nlogn
+Average:nlogn
+Worst:nlogn
+```
+
+**Implementation**
+
+[here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/merge)
+
