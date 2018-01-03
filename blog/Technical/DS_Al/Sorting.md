@@ -172,3 +172,60 @@ Worst:nlogn
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/merge)
 
+### Quick Sort
+
+**Heuristic**
+
+The quick sort divides an array into two pieces, but unlike merge sort, these pieces are not necessarily halves of the array. Instead, quick sort chooses one entry in the array—called the pivot—and rearranges the array entries so that
+• The pivot is in the position that it will occupy in the final sorted array 
+• Entries in positions before the pivot are less than or equal to the pivot 
+• Entries in positions after the pivot are greater than or equal to the pivot
+
+**Pseudocode**
+
+```
+Algorithm quickSort(a, first, last)
+// sort a from first to last, save into temArray
+if first<last
+	choose a pivot
+	Partition the array about the pivot
+	pivotIndex = index of pivot
+	quickSort(a, first, pivotIndex-1)
+	quickSort(a, pivotIndex+1, last)
+```
+
+```
+Algorithm partition(a, first, last)
+T pivot = a[last]
+int left=first
+int right=last-1
+boolean done=false
+while(!done)
+	// search swap position
+	while(a[left] < pivot)
+		left++
+	while(a[right] > pivot)
+		right--
+	if(left < right)
+		swap
+		left++
+		right--
+	else
+		done=true
+swap(left, last)
+return left
+```
+
+**Efficiency**
+
+```
+Best:nlogn
+Average:nlogn
+Worst:n^2
+```
+
+**Implementation**
+
+[here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/quick)
+
+### 
