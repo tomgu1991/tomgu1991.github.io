@@ -34,6 +34,9 @@ Total:O(n^2)
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/selection)
 
+---
+
+
 ### Insertion Sorting
 
 **Heuristic**
@@ -79,6 +82,8 @@ Worst: n^2
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/insertion)
 
+---
+
 ### Shell Sorting
 
 **Heuristic**
@@ -120,6 +125,8 @@ Worst:n^1.5
 **Implementation**
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/shell)
+
+---
 
 ### Merge Sorting
 
@@ -171,6 +178,8 @@ Worst:nlogn
 **Implementation**
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/merge)
+
+---
 
 ### Quick Sort
 
@@ -228,6 +237,8 @@ Worst:n^2
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/quick)
 
+---
+
 ### Radix Sort
 
 **Heuristic**
@@ -254,3 +265,4 @@ for i = 0 to maxDigits-1
 O(dn), where d is maxDigits
 ```
 
+But it is not suited to any situation.
