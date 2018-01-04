@@ -228,4 +228,29 @@ Worst:n^2
 
 [here](https://github.com/tomgu1991/Interview_pre/tree/master/source/helloworld/src/com/tomgu/algorithm/sorting/quick)
 
-### 
+### Radix Sort
+
+**Heuristic**
+
+The radix sort does not use comparison, but to work, it must restrict the data that it sorts. For this restricted data, the radix sort is O(n), and so it is faster than any other sort in this chapter. However, it is not suit- able as a general-purpose sorting algorithm, because it treats array entries as if they were strings that have the same length.
+
+That is sort from the last digit to the first digit.
+
+**Pesudocode**
+
+```
+Algorithm redixSort(a, first, last, maxDigits)
+for i = 0 to maxDigits-1
+	Clear b[0]...b[9]
+	for index = first to last
+		digit = digit of a[index]
+		place a[index] at the end of b[digit]
+	refresh a by b[0-9]
+```
+
+**Efficiency**
+
+```
+O(dn), where d is maxDigits
+```
+
