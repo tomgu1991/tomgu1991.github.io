@@ -136,7 +136,8 @@ result = addEntry(binarySearchTree, newEntry) return result;
 
 AlgorithmaddEntry(binarySearchTree, newEntry)
 // Adds a new entry to a binary search tree that is not empty.
-// Returns null if newEntry did not exist already in the tree. Otherwise, returns the // tree entry that matched and was replaced by newEntry.
+// Returns null if newEntry did not exist already in the tree. Otherwise, returns the 
+  // tree entry that matched and was replaced by newEntry.
 result = null
 if (newEntry matches the entry in the root of binarySearchTree) {
 result = entryintheroot
