@@ -17,7 +17,7 @@ We begin by using an array to represent a complete binary tree. A complete tree 
 
 Since the tree is complete, we can locate either the children or the parent of any node by performing a simple computation on the node’s number. This number is the same as the node’s corresponding array index. Thus, the children of the node i—if they exist—are stored in the array at indices 2i and 2i + 1. The parent of this node is at array index i/2, unless of course the node is the root. In that case, i/2 is 0, since the root is at index 1. To detect the root, we can watch for either this index or a special value—called a sentinel—that we place at index 0.
 
-![max heap](maxheap_1.png)
+![max heap](image/maxheap_1.png)
 
 ### Add
 
