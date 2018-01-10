@@ -688,7 +688,9 @@ We can reach any node in a tree by following a **path** that begins at the root 
 
 **Binary trees.** As we mentioned earlier, each node in a binary tree has at most two children. They are called the left child and the right child. When a binary tree of height h has all of its leaves at level h and every nonleaf (parent) has exactly two children, the tree is said to be **full**. If all levels of a binary tree but the last contain as many nodes as possible, and the nodes on the last level are filled in from left to right—as in Figure 23-6b—the tree is **complete**. 
 
-**Complete balanced tree**: 二叉树每个节点有两棵高度完全相等的子树Each node of binary tree has two sub-tree and they have the same height。如果高度差不大于一，则是**height balanced** or balanced。If their height difference is  one, thay are height balaced or balanced.
+**Complete balanced tree**: 二叉树每个节点有两棵高度完全相等的子树Each node of complete binary tree has two sub-tree and they have the same height。
+
+**Balanced tree**: Every node in a balanced binary tree has subtrees whose heights differ by no more than 1.
 
 In defining a **traversal**, or iteration, of a tree, we must **visit**, or process, each data item exactly once. However, the order in which we visit items is not unique. We can choose an order suitable to our application. **Preorder traversal**, root first, **Depth-first traversal**. **Inorder traversal**, root in the middle. **Postorder traversal** visits the root last. **Lever-order traversal** visits nodes one level at a time, it is a kind of **breadth-first traversal**. 
 
