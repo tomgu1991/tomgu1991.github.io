@@ -341,7 +341,9 @@ disp(Result);
     2.3333
 ```
 
+#### Build-in
 
+* mean | std 
 
 
 
