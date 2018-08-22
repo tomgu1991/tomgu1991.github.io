@@ -1,4 +1,4 @@
-# 18 ICSE Gamifying Static Analysis 
+# 18 FSE Gamifying Static Analysis 
 
 >https://blogs.uni-paderborn.de/sse/tools/gamifying-static-analysis
 
