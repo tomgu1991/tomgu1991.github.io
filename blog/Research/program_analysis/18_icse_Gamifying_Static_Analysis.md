@@ -10,7 +10,7 @@ The Self-Determination Theory (SDT) defines three innate psychological needs whi
 
 When thinking of games, concepts such as points, badges, or profiles immediately come to mind. However, it is important to remember that the goal of gamifying a system is not about making it a game but making the tool more engaging to the users, and also considering when not to gamify [5, 14]. All features of a good analysis tool should be engaging, useful (i.e., directly assist the developer in fixing bugs), and be minimally disruptive of the developer’s work [12, 16, 24]. 
 
-![](blog/Research/program_analysis/gsa_1.png)
+![](gsa_1.png)
 
 1. Responsiveness: Because static analysis can take a long time to terminate, analysis tools seldom provide support for providing immediate feedback in response to a developer modification of source code. To improve this, we raise two challenges. 
    * Making the analysis responsive. 
@@ -28,8 +28,8 @@ When thinking of games, concepts such as points, badges, or profiles immediately
 
 
 
-![](blog/Research/program_analysis/gsa_2.png)
+![](gsa_2.png)
 
-![gsa_3](blog/Research/program_analysis/gsa_3.png)
+![gsa_3](gsa_3.png)
 
-![gsa_4](blog/Research/program_analysis/gsa_4.png)
+![gsa_4](gsa_4.png)
